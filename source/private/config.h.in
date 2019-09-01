@@ -1,0 +1,7 @@
+#ifndef _MSE_CONFIG_H_
+#define _MSE_CONFIG_H_
+
+#define CONFIG_PTI @pti@
+#define PAGE_SIZE  @page_size@
+
+#endif // !_MSE_CONFIG_H_

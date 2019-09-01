@@ -1,0 +1,25 @@
+SECTIONS {
+  . = @load_offset@;
+
+  .text (@load_offset@ + @text_offset@) : {
+    *(ktext)
+    *(.text*)
+  }
+
+  .data : {
+    *(.data)
+  }
+
+  .bss : {
+    *(.bss)
+    *(COMMON)
+    . = ALIGN(4);
+    estack = .;
+    . = . + 0x1000;
+    sstack = .;
+  }
+
+  .rodata : {
+    *(.rodata*)
+  }
+}

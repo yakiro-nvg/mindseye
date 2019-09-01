@@ -1,0 +1,17 @@
+option(
+	'board',
+	type: 'string',
+	description: 'Board name',
+	value: 'qemu_virt')
+
+option(
+  'pti',
+  type: 'boolean',
+  description: 'Page table isolation',
+  value: 'true')
+
+option(
+  'page_size',
+  type: 'integer',
+  description: 'Page size in bytes',
+  value: 4096)
