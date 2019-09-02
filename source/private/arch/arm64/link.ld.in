@@ -1,9 +1,19 @@
+/* Copyright (c) 2019 Nguyen, Giang (G. Yakiro). All rights reserved. */
 SECTIONS {
   . = @load_offset@;
 
-  .text (@load_offset@ + @text_offset@) : {
+  . = . + @text_offset@;
+
+  .text : {
     *(ktext)
     *(.text*)
+  }
+
+  .init_array : ALIGN(4) {
+    sinit_array = .;
+    *(.init_array)
+    *(SORT_BY_INIT_PRIORITY(.init_array.*))
+    einit_array = .;
   }
 
   .data : {
@@ -13,10 +23,18 @@ SECTIONS {
   .bss : {
     *(.bss)
     *(COMMON)
+
+    /* stack */
     . = ALIGN(4);
     estack = .;
     . = . + 0x1000;
     sstack = .;
+
+    /* bump allocator */
+    . = ALIGN(4);
+    sbumpa = .;
+    . = . + 0x4000;
+    ebumpa = .;
   }
 
   .rodata : {

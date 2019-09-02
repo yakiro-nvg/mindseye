@@ -11,14 +11,14 @@ typedef struct page_pool_s {
   uint8_t *pages;
   uint32_t *bitmap;
   int num_bitmap;
-} *page_pool_t;
+} page_pool_t;
 
 /** Setups a new page pool.
 @param pages: must be aligned on PAGE_SIZE.
 @param bitmap: number of bitmap = capacity / 32 (bits). */
 void
 page_pool_setup(
-  page_pool_t pool
+  page_pool_t *pool
 , uint8_t *pages
 , uint32_t *bitmap
 , int capacity
@@ -28,13 +28,13 @@ page_pool_setup(
 \return NULL if out-of-memory. */
 void*
 page_pool_take(
-  page_pool_t pool
+  page_pool_t *pool
 );
 
 /// Returns `page` to pool.
 void
 page_pool_drop(
-  page_pool_t pool
+  page_pool_t *pool
 , void *page
 );
 

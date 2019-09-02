@@ -1,3 +1,4 @@
+// Copyright (c) 2019 Nguyen, Giang (G. Yakiro). All rights reserved.
 .global _entry
 .extern entry
 

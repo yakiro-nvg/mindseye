@@ -1,3 +1,4 @@
+# Copyright (c) 2019 Nguyen, Giang (G. Yakiro). All rights reserved.
 add_project_arguments('-DMSE_ARM64', language : 'c')
 
 link_conf_data = configuration_data({
@@ -12,6 +13,7 @@ configure_file(
 srcs += [
 	files(
 	  'entry.S',
-    'entry.c'
+    'entry.c',
+    'setup.c'
 	)
 ]

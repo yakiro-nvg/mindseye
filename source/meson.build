@@ -1,9 +1,14 @@
+# Copyright (c) 2019 Nguyen, Giang (G. Yakiro). All rights reserved.
 include_directories = [
 ]
 
 srcs = [
+  'private/ctors.c',
+  'private/bump.c',
+  'private/fdt.c',
   'private/mindseye.c',
-  'private/paging.c'
+  'private/paging.c',
+  'private/printk.c'
 ]
 
 c_args = [
@@ -17,12 +22,14 @@ link_args = [
 
 subdir('private/boards')
 subdir('private/arch')
+subdir('private/printk')
 
 subdir('private/vendor/string')
+subdir('private/vendor/printf')
 subdir('private/vendor/libfdt')
+subdir('private/vendor/endianness')
 
 conf_data = configuration_data({
-  'pti': get_option('pti') ? 'true' : 'false',
   'page_size': get_option('page_size')
 })
 configure_file(

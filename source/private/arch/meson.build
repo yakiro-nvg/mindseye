@@ -1,3 +1,4 @@
+# Copyright (c) 2019 Nguyen, Giang (G. Yakiro). All rights reserved.
 cpu = host_machine.cpu()
 
 arch_name = ''
