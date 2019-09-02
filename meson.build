@@ -1,5 +1,4 @@
 # Copyright (c) 2019 Nguyen, Giang (G. Yakiro). All rights reserved.
-
 project(
     'mindseye', 'c',
     default_options: [

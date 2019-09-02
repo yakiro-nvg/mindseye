@@ -1,7 +1,7 @@
+// Copyright (c) 2019 Nguyen, Giang (G. Yakiro). All rights reserved.
 #ifndef _MSE_CONFIG_H_
 #define _MSE_CONFIG_H_
 
-#define CONFIG_PTI @pti@
-#define PAGE_SIZE  @page_size@
+#define PAGE_SIZE @page_size@
 
 #endif // !_MSE_CONFIG_H_

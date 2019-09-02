@@ -1,3 +1,4 @@
+// Copyright (c) 2019 Nguyen, Giang (G. Yakiro). All rights reserved.
 #include <mse/paging.h>
 
 #include <config.h>
@@ -6,7 +7,7 @@
 
 void
 page_pool_setup(
-  page_pool_t pool
+  page_pool_t *pool
 , uint8_t *pages
 , uint32_t *bitmap
 , int capacity)
@@ -19,7 +20,7 @@ page_pool_setup(
 
 void*
 page_pool_take(
-  page_pool_t pool)
+  page_pool_t *pool)
 {
   for (int i = 0; i < pool->num_bitmap; ++i) {
     const int clz = count_leading_zeros(pool->bitmap[i]);
@@ -33,7 +34,7 @@ page_pool_take(
 
 void
 page_pool_drop(
-  page_pool_t pool
+  page_pool_t *pool
 , void *page)
 {
   const int byte_dif = (((uint8_t*)page) - pool->pages);

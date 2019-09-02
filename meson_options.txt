@@ -1,3 +1,4 @@
+# Copyright (c) 2019 Nguyen, Giang (G. Yakiro). All rights reserved.
 option(
 	'board',
 	type: 'string',
@@ -5,13 +6,13 @@ option(
 	value: 'qemu_virt')
 
 option(
-  'pti',
-  type: 'boolean',
-  description: 'Page table isolation',
-  value: 'true')
+  'page_size',
+  type: 'integer',
+  description: 'Page size in bytes',
+  value: 4096)
 
 option(
-  'page_size',
+  '',
   type: 'integer',
   description: 'Page size in bytes',
   value: 4096)
