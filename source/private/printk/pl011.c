@@ -98,7 +98,7 @@ static inline void
 wait_until_uart_free(
   struct pl011_context_s *self)
 {
-  while ((mmio_read32(self->base_address, REG_UARTFR) & FR_TXFF) == 1) { }
+  while ((mmio_read32(self->base_address, REG_UARTFR) & FR_TXFF) != 0) { }
 }
 
 static printk_driver_context_t*
