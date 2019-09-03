@@ -1,8 +1,9 @@
 # Copyright (c) 2019 Nguyen, Giang (G. Yakiro). All rights reserved.
-include_directories = [
+mindseye_include_directories = [
+  include_directories('.')
 ]
 
-srcs = [
+mindseye_srcs = [
   'private/ctors.c',
   'private/bump.c',
   'private/fdt.c',
@@ -11,23 +12,18 @@ srcs = [
   'private/printk.c'
 ]
 
-c_args = [
+mindseye_c_args = [
   '-ffreestanding',
   '-fno-function-sections'
 ]
 
-link_args = [
+mindseye_link_args = [
   '-nostdlib'
 ]
 
 subdir('private/boards')
 subdir('private/arch')
 subdir('private/printk')
-
-subdir('private/vendor/string')
-subdir('private/vendor/printf')
-subdir('private/vendor/libfdt')
-subdir('private/vendor/endianness')
 
 conf_data = configuration_data({
   'page_size': get_option('page_size')
@@ -39,6 +35,9 @@ configure_file(
 
 executable(
   'mindseye',
-  srcs, c_args: c_args,
-  link_args: link_args,
-  include_directories: include_directories)
+  [mindseye_srcs, vendor_srcs],
+  c_args: mindseye_c_args,
+  link_args: mindseye_link_args,
+  include_directories: [
+    mindseye_include_directories,
+    vendor_include_directories ])

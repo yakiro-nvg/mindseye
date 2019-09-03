@@ -10,7 +10,7 @@ configure_file(
   output: 'link.ld',
   configuration: link_conf_data)
 
-srcs += [
+mindseye_srcs += [
 	files(
 	  'entry.S',
     'entry.c',

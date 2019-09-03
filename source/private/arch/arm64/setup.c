@@ -8,7 +8,7 @@ void
 arch_setup(
   const void *fdt)
 {
-  const char *name = fdt_machine_name(fdt);
-  printf("hello, this is: %s\n", name);
+  const char *name = fdt_machine_name(fdt) ? : "unknown";
+  printf("Architecture: aarch64, machine: %s\n", name);
   while (1);
 }

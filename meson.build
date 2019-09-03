@@ -10,4 +10,5 @@ project(
     ]
 )
 
+subdir('vendor')
 subdir('source')

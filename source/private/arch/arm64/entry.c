@@ -2,6 +2,7 @@
 #include "setup.h"
 
 #include <mse/printk.h>
+#include <printf.h>
 
 void
 call_constructors(
@@ -18,6 +19,7 @@ void entry()
 
   // setup printk for log
   printk_setup(fdt);
+  printf("\n\n======= Mind's Eye, welcome! =======\n");
 
   // architecture bringups
   arch_setup(fdt);
