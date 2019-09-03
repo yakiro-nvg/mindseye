@@ -1,6 +1,5 @@
-
-// Copyright (c) 2019 Nguyen, Giang (G. Yakiro). All rights reserved.
-/* Paged memory sub-system. */
+/* Copyright (c) 2019 Nguyen, Giang (G. Yakiro). All rights reserved.
+ * SPDX-License-Identifier: BSD-2-Clause. */
 #ifndef _MSE_PAGING_H_
 #define _MSE_PAGING_H_
 
