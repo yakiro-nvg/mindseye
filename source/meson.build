@@ -6,7 +6,6 @@ mindseye_include_directories = [
 
 mindseye_srcs = [
   'private/ctors.c',
-  'private/bump.c',
   'private/fdt.c',
   'private/mindseye.c',
   'private/paging.c',
@@ -27,7 +26,8 @@ subdir('private/arch')
 subdir('private/printk')
 
 conf_data = configuration_data({
-  'page_size': get_option('page_size')
+  'page_size': get_option('page_size'),
+  'printk_buffer_size': get_option('printk_buffer_size')
 })
 configure_file(
   input: 'private/config.h.in',

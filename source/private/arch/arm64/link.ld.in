@@ -3,9 +3,12 @@
 SECTIONS {
   . = @load_offset@;
 
-  . = . + @text_offset@;
+  /* printk buffer */
+  sprintk = .;
+  . = . + @printk_buffer_size@;
+  eprintk = .;
 
-  .text : {
+  .text (@load_offset@ + @text_offset@) : {
     *(ktext)
     *(.text*)
   }
@@ -28,14 +31,8 @@ SECTIONS {
     /* stack */
     . = ALIGN(4);
     estack = .;
-    . = . + 0x1000;
+    . = . + @stack_size@;
     sstack = .;
-
-    /* bump allocator */
-    . = ALIGN(4);
-    sbumpa = .;
-    . = . + 0x4000;
-    ebumpa = .;
   }
 
   .rodata : {

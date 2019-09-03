@@ -4,5 +4,6 @@
 #define _MSE_CONFIG_H_
 
 #define PAGE_SIZE @page_size@
+#define PRINTK_BUFFER_SIZE @printk_buffer_size@
 
 #endif // !_MSE_CONFIG_H_

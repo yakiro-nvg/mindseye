@@ -3,8 +3,9 @@
 #include <mse/printk.h>
 
 #include <mse/mmio.h>
-#include <mse/bump.h>
 #include <mse/fdt.h>
+
+#define LOG_TAG "printk_pl011"
 
 enum { BAUDRATE = 115200 };
 
@@ -48,17 +49,29 @@ parse_fdt(
   const int address_cells = fdt_address_cells(fdt, node_offset);
   const uint32_t *reg = (const uint32_t*)fdt_getprop(
     fdt, node_offset, "reg", NULL);
-  if (reg == NULL) return false;
+  if (reg == NULL) {
+    pr_error(LOG_TAG, "'reg' was missing\n");
+    return false;
+  }
   self->base_address = fdt_next_cell(address_cells, &reg);
   const uint32_t *clk = (const uint32_t*)fdt_getprop(
     fdt, node_offset, "clocks", NULL);
-  if (clk == NULL) return false;
+  if (clk == NULL) {
+    pr_error(LOG_TAG, "'clocks' was missing\n");
+    return false;
+  }
   const uint32_t clock_phandle = (uint32_t)fdt_next_cell(1, &clk);
   const int clock_offset = fdt_node_offset_by_phandle(fdt, clock_phandle);
-  if (clock_offset < 0) return false;
+  if (clock_offset < 0) {
+    pr_error(LOG_TAG, "clock not found\n");
+    return false;
+  }
   const uint32_t *clk_frq = (const uint32_t*)fdt_getprop(
     fdt, clock_offset, "clock-frequency", NULL);
-  if (clk_frq == NULL) return false;
+  if (clk_frq == NULL) {
+    pr_error(LOG_TAG, "'clock-frequency' was missing\n");
+    return false;
+  }
   self->clock_frequency = (uint32_t)fdt_next_cell(1, &clk_frq);
   return true;
 }
@@ -102,18 +115,20 @@ wait_until_uart_free(
   while ((mmio_read32(self->base_address, REG_UARTFR) & FR_TXFF) != 0) { }
 }
 
-static printk_driver_context_t*
+static error_t
 init(
-  const void *fdt
+  printk_driver_context_t* mem
+, const void *fdt
 , int node_offset)
 {
   struct pl011_context_s *self;
-  self = bump_malloc(sizeof(*self));
-  if (!parse_fdt(self, fdt, node_offset)) return NULL;
+  if (mem == NULL) return sizeof(*self);
+  self = (struct pl011_context_s*)mem;
+  if (!parse_fdt(self, fdt, node_offset)) return ERR_MALFORMED;
   set_baudrate(self, BAUDRATE);
   set_line_control(self, LINE_CONTROL);
   enable_tx_only(self);
-  return (printk_driver_context_t*)self;
+  return ERR_NONE;
 }
 
 static void

@@ -3,13 +3,15 @@
 #include "setup.h"
 
 #include <mse/fdt.h>
-#include <printf.h>
+#include <mse/printk.h>
+
+#define LOG_TAG "arm64_setup"
 
 void
 arch_setup(
   const void *fdt)
 {
   const char *name = fdt_machine_name(fdt) ? : "unknown";
-  printf("Architecture: arm64, machine: %s\n", name);
-  while (1);
+  pr_info(LOG_TAG, "architecture: arm64, machine: %s\n", name);
+  pr_fatal(LOG_TAG, "TODO\n");
 }
