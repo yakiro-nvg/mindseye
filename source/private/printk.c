@@ -23,10 +23,7 @@ printk_driver_list_t printk_drivers = {
 extern char sprintk[]; extern char eprintk[];
 static int write_off = 0, driver_off = 0;
 
-static void
-early_putc(
-  printk_driver_context_t *ctx
-, const char c)
+static void early_putc(printk_driver_context_t *ctx, const char c)
 {
   if (write_off != PRINTK_BUFFER_SIZE) {
     sprintk[write_off++] = c;
@@ -44,18 +41,13 @@ static const printk_driver_class_t early_class = {
 static const printk_driver_class_t *class = &early_class;
 
 // driver context resides in bottom
-static inline printk_driver_context_t*
-driver_context(
-  void)
+static inline printk_driver_context_t* driver_context()
 {
   return (printk_driver_context_t*)(eprintk - driver_off);
 }
 
-static bool
-try_switch_driver(
-  const printk_driver_class_t *c
-, const void *fdt
-, int node_offset)
+static bool try_switch_driver(
+  const printk_driver_class_t *c, const void *fdt, int node_offset)
 {
   driver_off = c->init(NULL, NULL, 0);
   if (c->init(driver_context(), fdt, node_offset) == ERR_NONE) {
@@ -72,16 +64,17 @@ try_switch_driver(
   }
 }
 
-void
-_putchar(
-  char c)
+static void die()
+{
+  while (true) { }
+}
+
+void _putchar(char c)
 {
   class->putc(driver_context(), c);
 }
 
-void
-printk_setup(
-  const void *fdt)
+void printk_setup(const void *fdt)
 {
   bool found = false;
 
@@ -112,11 +105,7 @@ printk_setup(
   if (!found) pr_fatal(LOG_TAG, "failed to initialize\n");
 }
 
-void
-pr_info(
-  const char *log_tag
-, const char *format
-, ...)
+void pr_info(const char *log_tag, const char *format, ...)
 {
   printf("[i@%s] ", log_tag);
   va_list va;
@@ -125,11 +114,7 @@ pr_info(
   va_end(va);
 }
 
-void
-pr_warning(
-  const char *log_tag
-, const char *format
-, ...)
+void pr_warning(const char *log_tag, const char *format, ...)
 {
   printf("[w@%s] ", log_tag);
   va_list va;
@@ -138,11 +123,7 @@ pr_warning(
   va_end(va);
 }
 
-void
-pr_error(
-  const char *log_tag
-, const char *format
-, ...)
+void pr_error(const char *log_tag, const char *format, ...)
 {
   printf("[e@%s] ", log_tag);
   va_list va;
@@ -151,16 +132,12 @@ pr_error(
   va_end(va);
 }
 
-void
-pr_fatal(
-  const char *log_tag
-, const char *format
-, ...)
+void pr_fatal(const char *log_tag, const char *format, ...)
 {
   printf("[f@%s] ", log_tag);
   va_list va;
   va_start(va, format);
   vprintf_(format, va);
   va_end(va);
-  while (true) { /* RIP */ }
+  die();
 }

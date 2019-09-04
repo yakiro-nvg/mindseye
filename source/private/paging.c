@@ -6,12 +6,7 @@
 #include <string.h>
 #include <mse/bitops.h>
 
-void
-page_pool_setup(
-  page_pool_t *pool
-, uint8_t *pages
-, uint32_t *bitmap
-, int capacity)
+void page_pool_setup(page_pool_t *pool, uint8_t *pages, uint32_t *bitmap, int capacity)
 {
   pool->pages = pages;
   pool->bitmap = bitmap;
@@ -19,9 +14,7 @@ page_pool_setup(
   memset(bitmap, 0xff, sizeof(*bitmap)*pool->num_bitmap);
 }
 
-void*
-page_pool_take(
-  page_pool_t *pool)
+void* page_pool_take(page_pool_t *pool)
 {
   for (int i = 0; i < pool->num_bitmap; ++i) {
     const int clz = count_leading_zeros(pool->bitmap[i]);
@@ -33,10 +26,7 @@ page_pool_take(
   return NULL;
 }
 
-void
-page_pool_drop(
-  page_pool_t *pool
-, void *page)
+void page_pool_drop(page_pool_t *pool, void *page)
 {
   const int byte_dif = (((uint8_t*)page) - pool->pages);
   const int page_idx = byte_dif / PAGE_SIZE;

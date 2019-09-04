@@ -11,19 +11,15 @@
 #endif
 
 /// Turns `nth` bit on.
-static inline void
-set_bit(
-  uint32_t *u
-, int nth)
+static inline void  set_bit   (uint32_t *u,
+                               int       nth)
 {
   *u |=  (1 << nth);
 }
 
 /// Turns `nth` bit off.
-static inline void
-clear_bit(
-  uint32_t *u
-, int nth)
+static inline void  clear_bit (uint32_t *u,
+                               int       nth)
 {
   *u &= ~(1 << nth);
 }

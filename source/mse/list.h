@@ -10,9 +10,8 @@ typedef struct list_node_s {
 } list_node_t;
 
 /// Adds `node` to back.
-static inline void
-list_push_back(
-  list_node_t *root, list_node_t *node)
+static inline void list_push_back(list_node_t *root,
+                                  list_node_t *node)
 {
   node->next = root->next;
   node->prev = root;

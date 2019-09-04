@@ -6,9 +6,7 @@
 #include <stdint.h>
 
 /// Returns number of leading zero bits.
-static inline int
-count_leading_zeros(
-  uint32_t u)
+static inline int count_leading_zeros(uint32_t u)
 {
   uint32_t v;
 	asm volatile ("clz %0, %1" : "=r" (v) : "r" (u));

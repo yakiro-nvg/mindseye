@@ -10,10 +10,7 @@
 // TODO: should be passed from bootloader
 static const void *fdt = (const void *)0x40000000;
 
-void
-call_constructors(
-  void
-);
+void call_constructors();
 
 void entry()
 {

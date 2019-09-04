@@ -19,10 +19,7 @@ typedef struct printk_driver_class_s {
   const driver_match_t *const matches;
   /** Initializes with a context memory region.
   @param mem: pass `NULL` to get number of bytes required. */
-  error_t (*init)(
-    printk_driver_context_t *mem
-  , const void *fdt
-  , int node_offset);
+  error_t (*init)(printk_driver_context_t *mem, const void *fdt, int node_offset);
   /// Put a single character.
   void (*putc)(printk_driver_context_t *ctx, const char c);
 } printk_driver_class_t;
@@ -55,41 +52,26 @@ extern printk_driver_list_t printk_drivers;
   ((printk_driver_node_t*)itr)->class
 
 /// Initializes with chosen.stdout-path.
-void
-printk_setup(
-  const void *fdt
-);
+void  printk_setup  (const void *fdt);
 
 /// Print information message.
-void
-pr_info(
-  const char *log_tag
-, const char *format
-, ...
-);
+void  pr_info       (const char *log_tag,
+                     const char *format,
+                     ...);
 
 /// Print warning message.
-void
-pr_warning(
-  const char *log_tag
-, const char *format
-, ...
-);
+void  pr_warning    (const char *log_tag,
+                     const char *format,
+                     ...);
 
 /// Print error message.
-void
-pr_error(
-  const char *log_tag
-, const char *format
-, ...
-);
+void  pr_error      (const char *log_tag,
+                     const char *format,
+                     ...);
 
 /// Rest in peace.
-void
-pr_fatal(
-  const char *log_tag
-, const char *format
-, ...
-);
+void  pr_fatal      (const char *log_tag,
+                     const char *format,
+                     ...);
 
 #endif // !_MSE_PRINTK_H_
