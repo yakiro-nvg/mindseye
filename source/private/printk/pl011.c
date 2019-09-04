@@ -46,26 +46,26 @@ static bool parse_fdt(struct pl011_context_s *self, const void *fdt, int node_of
   const uint32_t *reg = (const uint32_t*)fdt_getprop(
     fdt, node_offset, "reg", NULL);
   if (reg == NULL) {
-    pr_error(LOG_TAG, "'reg' was missing\n");
+    pr_error(LOG_TAG, "'reg' was missing");
     return false;
   }
   self->base_address = fdt_next_cell(address_cells, &reg);
   const uint32_t *clk = (const uint32_t*)fdt_getprop(
     fdt, node_offset, "clocks", NULL);
   if (clk == NULL) {
-    pr_error(LOG_TAG, "'clocks' was missing\n");
+    pr_error(LOG_TAG, "'clocks' was missing");
     return false;
   }
   const uint32_t clock_phandle = (uint32_t)fdt_next_cell(1, &clk);
   const int clock_offset = fdt_node_offset_by_phandle(fdt, clock_phandle);
   if (clock_offset < 0) {
-    pr_error(LOG_TAG, "clock not found\n");
+    pr_error(LOG_TAG, "clock not found");
     return false;
   }
   const uint32_t *clk_frq = (const uint32_t*)fdt_getprop(
     fdt, clock_offset, "clock-frequency", NULL);
   if (clk_frq == NULL) {
-    pr_error(LOG_TAG, "'clock-frequency' was missing\n");
+    pr_error(LOG_TAG, "'clock-frequency' was missing");
     return false;
   }
   self->clock_frequency = (uint32_t)fdt_next_cell(1, &clk_frq);

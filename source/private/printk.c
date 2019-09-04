@@ -91,7 +91,7 @@ void printk_setup(const void *fdt)
   }
 
   if (!found) {
-    pr_info(LOG_TAG, "fall-back to NULL driver\n");
+    pr_info(LOG_TAG, "fall-back to NULL driver");
     PRINTK_DRIVER_FOREACH(itr) {
       const printk_driver_class_t *c = PRINTK_DRIVER_GET(itr);
       if (strcmp(c->class_name, "printk_null") == 0 &&
@@ -102,7 +102,7 @@ void printk_setup(const void *fdt)
     }
   }
 
-  if (!found) pr_fatal(LOG_TAG, "failed to initialize\n");
+  if (!found) pr_fatal(LOG_TAG, "failed to initialize");
 }
 
 void pr_info(const char *log_tag, const char *format, ...)
@@ -112,6 +112,7 @@ void pr_info(const char *log_tag, const char *format, ...)
   va_start(va, format);
   vprintf_(format, va);
   va_end(va);
+  _putchar('\n');
 }
 
 void pr_warning(const char *log_tag, const char *format, ...)
@@ -121,6 +122,7 @@ void pr_warning(const char *log_tag, const char *format, ...)
   va_start(va, format);
   vprintf_(format, va);
   va_end(va);
+  _putchar('\n');
 }
 
 void pr_error(const char *log_tag, const char *format, ...)
@@ -130,6 +132,7 @@ void pr_error(const char *log_tag, const char *format, ...)
   va_start(va, format);
   vprintf_(format, va);
   va_end(va);
+  _putchar('\n');
 }
 
 void pr_fatal(const char *log_tag, const char *format, ...)
@@ -139,5 +142,6 @@ void pr_fatal(const char *log_tag, const char *format, ...)
   va_start(va, format);
   vprintf_(format, va);
   va_end(va);
+  _putchar('\n');
   die();
 }

@@ -10,6 +10,6 @@
 void arch_setup(const void *fdt)
 {
   const char *name = fdt_machine_name(fdt) ? : "unknown";
-  pr_info(LOG_TAG, "architecture: arm64, machine: %s\n", name);
-  pr_fatal(LOG_TAG, "TODO\n");
+  pr_info(LOG_TAG, "architecture: arm64, machine: %s", name);
+  pr_fatal(LOG_TAG, "TODO");
 }
