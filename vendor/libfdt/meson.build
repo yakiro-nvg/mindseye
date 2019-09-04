@@ -1,8 +1,8 @@
-include_directories += [
-  'private/vendor/libfdt'
+vendor_include_directories += [
+  include_directories('.')
 ]
 
-srcs += [
+vendor_srcs += [
   files(
     'fdt_addresses.c',
     'fdt_empty_tree.c',

@@ -1,7 +1,9 @@
-// Copyright (c) 2019 Nguyen, Giang (G. Yakiro). All rights reserved.
+/* Copyright (c) 2019 Nguyen, Giang (G. Yakiro). All rights reserved.
+ * SPDX-License-Identifier: BSD-2-Clause. */
 #ifndef _MSE_CONFIG_H_
 #define _MSE_CONFIG_H_
 
 #define PAGE_SIZE @page_size@
+#define PRINTK_BUFFER_SIZE @printk_buffer_size@
 
 #endif // !_MSE_CONFIG_H_

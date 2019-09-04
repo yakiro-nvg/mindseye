@@ -1,4 +1,4 @@
-srcs += [
+vendor_srcs += [
   files(
     'memchr.S',
     'memcmp.S',

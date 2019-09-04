@@ -1,9 +1,11 @@
-// Copyright (c) 2019 Nguyen, Giang (G. Yakiro). All rights reserved.
+/* Copyright (c) 2019 Nguyen, Giang (G. Yakiro). All rights reserved.
+ * SPDX-License-Identifier: BSD-2-Clause. */
 #include <mse/printk.h>
 
 #include <mse/mmio.h>
-#include <mse/bump.h>
 #include <mse/fdt.h>
+
+#define LOG_TAG "printk_pl011"
 
 enum { BAUDRATE = 115200 };
 
@@ -38,87 +40,78 @@ struct pl011_context_s {
   uint32_t clock_frequency;
 };
 
-static bool
-parse_fdt(
-  struct pl011_context_s *self
-, const void *fdt
-, int node_offset)
+static bool parse_fdt(struct pl011_context_s *self, const void *fdt, int node_offset)
 {
   const int address_cells = fdt_address_cells(fdt, node_offset);
   const uint32_t *reg = (const uint32_t*)fdt_getprop(
     fdt, node_offset, "reg", NULL);
-  if (reg == NULL) return false;
+  if (reg == NULL) {
+    pr_error(LOG_TAG, "'reg' was missing");
+    return false;
+  }
   self->base_address = fdt_next_cell(address_cells, &reg);
   const uint32_t *clk = (const uint32_t*)fdt_getprop(
     fdt, node_offset, "clocks", NULL);
-  if (clk == NULL) return false;
+  if (clk == NULL) {
+    pr_error(LOG_TAG, "'clocks' was missing");
+    return false;
+  }
   const uint32_t clock_phandle = (uint32_t)fdt_next_cell(1, &clk);
   const int clock_offset = fdt_node_offset_by_phandle(fdt, clock_phandle);
-  if (clock_offset < 0) return false;
+  if (clock_offset < 0) {
+    pr_error(LOG_TAG, "clock not found");
+    return false;
+  }
   const uint32_t *clk_frq = (const uint32_t*)fdt_getprop(
     fdt, clock_offset, "clock-frequency", NULL);
-  if (clk_frq == NULL) return false;
+  if (clk_frq == NULL) {
+    pr_error(LOG_TAG, "'clock-frequency' was missing");
+    return false;
+  }
   self->clock_frequency = (uint32_t)fdt_next_cell(1, &clk_frq);
   return true;
 }
 
-static inline void
-set_baudrate(
-  struct pl011_context_s *self
-, int baudrate)
+INLINE void set_baudrate(struct pl011_context_s *self, int baudrate)
 {
   unsigned int divisor = (self->clock_frequency*4) / baudrate;
 	mmio_write32(self->base_address, REG_UARTIBRD, divisor >> 6);
 	mmio_write32(self->base_address, REG_UARTFBRD, divisor & 0x3f);
 }
 
-static inline void
-set_line_control(
-  struct pl011_context_s *self
-, int line_control)
+INLINE void set_line_control(struct pl011_context_s *self, int line_control)
 {
   mmio_write32(self->base_address, REG_UARTLCR_H, line_control);
 }
 
-static inline void
-clear_pending_errors(
-  struct pl011_context_s *self)
+INLINE void clear_pending_errors(struct pl011_context_s *self)
 {
   mmio_write32(self->base_address, REG_UARTECR, 0);
 }
 
-static inline void
-enable_tx_only(
-  struct pl011_context_s *self)
+INLINE void enable_tx_only(struct pl011_context_s *self)
 {
   mmio_write32(self->base_address, REG_UARTCR, CR_TXEN | CR_EN);
 }
 
-static inline void
-wait_until_uart_free(
-  struct pl011_context_s *self)
+INLINE void wait_until_uart_free(struct pl011_context_s *self)
 {
-  while ((mmio_read32(self->base_address, REG_UARTFR) & FR_TXFF) == 1) { }
+  while ((mmio_read32(self->base_address, REG_UARTFR) & FR_TXFF) != 0) { }
 }
 
-static printk_driver_context_t*
-init(
-  const void *fdt
-, int node_offset)
+static error_t init(printk_driver_context_t* mem, const void *fdt, int node_offset)
 {
   struct pl011_context_s *self;
-  self = bump_malloc(sizeof(*self));
-  if (!parse_fdt(self, fdt, node_offset)) return NULL;
+  if (mem == NULL) return sizeof(*self);
+  self = (struct pl011_context_s*)mem;
+  if (!parse_fdt(self, fdt, node_offset)) return ERR_MALFORMED;
   set_baudrate(self, BAUDRATE);
   set_line_control(self, LINE_CONTROL);
   enable_tx_only(self);
-  return (printk_driver_context_t*)self;
+  return ERR_NONE;
 }
 
-static void
-putc(
-  printk_driver_context_t *ctx
-, const char c)
+static void putc(printk_driver_context_t *ctx, const char c)
 {
   struct pl011_context_s *self = (struct pl011_context_s*)ctx;
   if (c == '\n') { // line return is "\r\n"

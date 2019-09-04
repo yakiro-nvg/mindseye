@@ -1,4 +1,5 @@
-// Copyright (c) 2019 Nguyen, Giang (G. Yakiro). All rights reserved.
+/* Copyright (c) 2019 Nguyen, Giang (G. Yakiro). All rights reserved.
+ * SPDX-License-Identifier: BSD-2-Clause. */
 #ifndef _MSE_DRIVER_H_
 #define _MSE_DRIVER_H_
 
