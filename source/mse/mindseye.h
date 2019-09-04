@@ -1,6 +1,11 @@
 /* Copyright (c) 2019 Nguyen, Giang (G. Yakiro). All rights reserved.
  * SPDX-License-Identifier: BSD-2-Clause. */
-#pragma once
+#ifndef _MSE_MINDSEYE_H_
+#define _MSE_MINDSEYE_H_
+
+#include <mse/prereq.h>
 
 /// Portable entrypoint.
 void mindseye();
+
+#endif // !_MSE_MINDSEYE_H_

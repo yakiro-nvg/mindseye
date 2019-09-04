@@ -72,29 +72,29 @@ static bool parse_fdt(struct pl011_context_s *self, const void *fdt, int node_of
   return true;
 }
 
-static inline void set_baudrate(struct pl011_context_s *self, int baudrate)
+INLINE void set_baudrate(struct pl011_context_s *self, int baudrate)
 {
   unsigned int divisor = (self->clock_frequency*4) / baudrate;
 	mmio_write32(self->base_address, REG_UARTIBRD, divisor >> 6);
 	mmio_write32(self->base_address, REG_UARTFBRD, divisor & 0x3f);
 }
 
-static inline void set_line_control(struct pl011_context_s *self, int line_control)
+INLINE void set_line_control(struct pl011_context_s *self, int line_control)
 {
   mmio_write32(self->base_address, REG_UARTLCR_H, line_control);
 }
 
-static inline void clear_pending_errors(struct pl011_context_s *self)
+INLINE void clear_pending_errors(struct pl011_context_s *self)
 {
   mmio_write32(self->base_address, REG_UARTECR, 0);
 }
 
-static inline void enable_tx_only(struct pl011_context_s *self)
+INLINE void enable_tx_only(struct pl011_context_s *self)
 {
   mmio_write32(self->base_address, REG_UARTCR, CR_TXEN | CR_EN);
 }
 
-static inline void wait_until_uart_free(struct pl011_context_s *self)
+INLINE void wait_until_uart_free(struct pl011_context_s *self)
 {
   while ((mmio_read32(self->base_address, REG_UARTFR) & FR_TXFF) != 0) { }
 }

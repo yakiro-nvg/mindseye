@@ -5,7 +5,6 @@
 #include <config.h>
 #include <string.h>
 #include <printf.h>
-#include <stdbool.h>
 #include <stdarg.h>
 #include <mse/fdt.h>
 
@@ -41,7 +40,7 @@ static const printk_driver_class_t early_class = {
 static const printk_driver_class_t *class = &early_class;
 
 // driver context resides in bottom
-static inline printk_driver_context_t* driver_context()
+INLINE printk_driver_context_t* driver_context()
 {
   return (printk_driver_context_t*)(eprintk - driver_off);
 }
