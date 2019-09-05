@@ -99,7 +99,7 @@ INLINE void wait_until_uart_free(struct pl011_context_s *self)
   while ((mmio_read32(self->base_address, REG_UARTFR) & FR_TXFF) != 0) { }
 }
 
-static error_t init(printk_driver_context_t* mem, const void *fdt, int node_offset)
+static int init(printk_driver_context_t* mem, const void *fdt, int node_offset)
 {
   struct pl011_context_s *self;
   if (mem == NULL) return sizeof(*self);

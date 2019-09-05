@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: BSD-2-Clause. */
 #include <mse/printk.h>
 
-static error_t init(printk_driver_context_t *mem, const void *fdt, int node_offset)
+static int init(printk_driver_context_t *mem, const void *fdt, int node_offset)
 {
   (void)(fdt);
   (void)(node_offset);
