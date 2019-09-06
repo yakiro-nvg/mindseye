@@ -19,7 +19,8 @@ typedef struct printk_driver_class_s {
   /** Initializes with a context memory region.
   @param mem: pass `NULL` to get number of bytes required.
   \return error_t or number of bytes required. */
-  int (*init)(printk_driver_context_t *mem, const void *fdt, int node_offset);
+  int (*init)(printk_driver_context_t *mem,
+    const char *compatible, const void *fdt, int node_offset);
   /// Put a single character.
   void (*putc)(printk_driver_context_t *ctx, const char c);
 } printk_driver_class_t;

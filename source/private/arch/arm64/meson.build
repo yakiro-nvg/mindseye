@@ -17,6 +17,6 @@ mindseye_srcs += [
 	files(
 	  'entry.S',
     'entry.c',
-    'setup.c'
+    'psci.S'
 	)
 ]

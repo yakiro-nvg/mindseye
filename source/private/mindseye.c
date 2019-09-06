@@ -2,7 +2,18 @@
  * SPDX-License-Identifier: BSD-2-Clause. */
 #include <mse/mindseye.h>
 
-void mindseye()
+#include <mse/cpu.h>
+#include <mse/printk.h>
+
+#define LOG_TAG "entry"
+
+void call_constructors();
+
+void mindseye(const void *fdt)
 {
-  while (true) { }
+  call_constructors();
+
+  printk_setup(fdt);
+
+  cpu_setup(fdt);
 }

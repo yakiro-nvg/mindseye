@@ -1,27 +1,19 @@
 /* Copyright (c) 2019 Nguyen, Giang (G. Yakiro). All rights reserved.
  * SPDX-License-Identifier: BSD-2-Clause. */
-#include "setup.h"
-
+#include <mse/mindseye.h>
 #include <mse/printk.h>
+#include <mse/fdt.h>
 #include <printf.h>
 
-#define LOG_TAG "arm64_entry"
+#define LOG_TAG "arm64"
 
 // TODO: should be passed from bootloader
 static const void *fdt = (const void *)0x40000000;
 
-void call_constructors();
-
 void entry()
 {
   printf("\n--=-=-=-=-=-=- Mind's Eye, welcome! -=-=-=-=-=-=--\n");
-
-  // static initializes
-  call_constructors();
-
-  // setup printk for log
-  printk_setup(fdt);
-
-  // architecture bringups
-  arch_setup(fdt);
+  const char *name = fdt_machine_name(fdt) ? : "unknown";
+  pr_info(LOG_TAG, "machine name: %s", name);
+  mindseye(fdt);
 }

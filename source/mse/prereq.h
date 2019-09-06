@@ -9,5 +9,6 @@
 #include <mse/errno.h>
 
 #define INLINE static inline
+#define UNUSED(x) (void)(x)
 
 #endif // !_MSE_PREREQ_H_

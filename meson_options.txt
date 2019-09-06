@@ -7,6 +7,12 @@ option(
   value: 'qemu_virt')
 
 option(
+  'max_cpus',
+  type: 'integer',
+  description: 'Maximum number of CPUs',
+  value: 8)
+
+option(
   'page_size',
   type: 'integer',
   description: 'Page size in bytes',

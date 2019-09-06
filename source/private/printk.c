@@ -11,8 +11,8 @@
 #define LOG_TAG "printk"
 
 static list_node_t root = {
-  .next = &root
-, .prev = &root
+  .next = &root,
+  .prev = &root
 };
 
 printk_driver_list_t printk_drivers = {
@@ -32,24 +32,25 @@ static void early_putc(printk_driver_context_t *ctx, const char c)
 // early memory backed printk driver, don't register it
 static const printk_driver_class_t early_class = {
   .class_name = NULL,
-  .matches = NULL,
-  .init = NULL,
-  .putc = &early_putc
+  .matches    = NULL,
+  .init       = NULL,
+  .putc       = &early_putc
 };
 
 static const printk_driver_class_t *class = &early_class;
 
 // driver context resides in bottom
-INLINE printk_driver_context_t* driver_context()
+INLINE printk_driver_context_t* ctx()
 {
   return (printk_driver_context_t*)(eprintk - driver_off);
 }
 
 static bool try_switch_driver(
-  const printk_driver_class_t *c, const void *fdt, int node_offset)
+  const printk_driver_class_t *c,
+  const char *compatible, const void *fdt, int node_offset)
 {
-  driver_off = c->init(NULL, NULL, 0);
-  if (c->init(driver_context(), fdt, node_offset) == ERR_NONE) {
+  driver_off = c->init(NULL, compatible, NULL, 0);
+  if (c->init(ctx(), compatible, fdt, node_offset) == ERR_NONE) {
     class = c; // switch to new driver
     for (int i = 0; i < write_off; ++i) {
       const char ic = sprintk[i];
@@ -70,7 +71,7 @@ static void die()
 
 void _putchar(char c)
 {
-  class->putc(driver_context(), c);
+  class->putc(ctx(), c);
 }
 
 void printk_setup(const void *fdt)
@@ -81,8 +82,8 @@ void printk_setup(const void *fdt)
   if (stdout >= 0) {
     PRINTK_DRIVER_FOREACH(itr) {
       const printk_driver_class_t *c = PRINTK_DRIVER_GET(itr);
-      if (fdt_compatible(fdt, stdout, c->matches) &&
-          try_switch_driver(c, fdt, stdout)) {
+      const char *comp = fdt_compatible(fdt, stdout, c->matches);
+      if (comp != NULL && try_switch_driver(c, comp, fdt, stdout)) {
         found = true;
         break;
       }
@@ -94,7 +95,7 @@ void printk_setup(const void *fdt)
     PRINTK_DRIVER_FOREACH(itr) {
       const printk_driver_class_t *c = PRINTK_DRIVER_GET(itr);
       if (strcmp(c->class_name, "printk_null") == 0 &&
-          try_switch_driver(c, fdt, stdout)) {
+          try_switch_driver(c, NULL, fdt, stdout)) {
         found = true;
         break;
       }
