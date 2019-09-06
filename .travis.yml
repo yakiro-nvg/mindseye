@@ -14,7 +14,7 @@ before_install:
 
 script:
   - echo FROM dockcross/linux-arm64 > Dockerfile
-  - echo RUN apt-get install -y python3 >> Dockerfile
+  - echo RUN apt-get update && apt-get install -y python3 python3-pip >> Dockerfile
   - echo RUN pip3 install --user meson >> Dockerfile
   - echo ADD . /root >> Dockerfile
   - docker build -t withgit .
