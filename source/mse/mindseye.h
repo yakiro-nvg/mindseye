@@ -6,6 +6,6 @@
 #include <mse/prereq.h>
 
 /// Portable entrypoint.
-void mindseye();
+void mindseye(const void *fdt);
 
 #endif // !_MSE_MINDSEYE_H_

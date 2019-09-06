@@ -2,18 +2,21 @@
  * SPDX-License-Identifier: BSD-2-Clause. */
 #include <mse/printk.h>
 
-static error_t init(printk_driver_context_t *mem, const void *fdt, int node_offset)
+static int printk_null_init(
+  printk_driver_context_t *mem,
+  const char *compatible, const void *fdt, int node_offset)
 {
-  (void)(fdt);
-  (void)(node_offset);
+  UNUSED(compatible);
+  UNUSED(fdt);
+  UNUSED(node_offset);
   if (mem == NULL) return 0;
   return ERR_NONE;
 }
 
-static void putc(printk_driver_context_t *ctx, const char c)
+static void printk_null_putc(printk_driver_context_t *ctx, const char c)
 {
-  (void)(ctx);
-  (void)(c);
+  UNUSED(ctx);
+  UNUSED(c);
   // nop
 }
 
@@ -22,10 +25,10 @@ static const driver_match_t matches[] = {
 };
 
 static const printk_driver_class_t class = {
-  .class_name = "printk_null"
-, .matches = matches
-, .init = &init
-, .putc = &putc
+  .class_name = "printk_null",
+  .matches    = matches,
+  .init       = &printk_null_init,
+  .putc       = &printk_null_putc
 };
 
 PRINTK_DRIVER(class)

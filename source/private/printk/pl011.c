@@ -99,8 +99,11 @@ INLINE void wait_until_uart_free(struct pl011_context_s *self)
   while ((mmio_read32(self->base_address, REG_UARTFR) & FR_TXFF) != 0) { }
 }
 
-static error_t init(printk_driver_context_t* mem, const void *fdt, int node_offset)
+static int printk_pl011_init(
+  printk_driver_context_t* mem,
+  const char *compatible, const void *fdt, int node_offset)
 {
+  UNUSED(compatible);
   struct pl011_context_s *self;
   if (mem == NULL) return sizeof(*self);
   self = (struct pl011_context_s*)mem;
@@ -111,7 +114,7 @@ static error_t init(printk_driver_context_t* mem, const void *fdt, int node_offs
   return ERR_NONE;
 }
 
-static void putc(printk_driver_context_t *ctx, const char c)
+static void printk_pl011_putc(printk_driver_context_t *ctx, const char c)
 {
   struct pl011_context_s *self = (struct pl011_context_s*)ctx;
   if (c == '\n') { // line return is "\r\n"
@@ -123,16 +126,16 @@ static void putc(printk_driver_context_t *ctx, const char c)
 }
 
 static const driver_match_t matches[] = {
-  { .compatible = "arm,pl011" }
-, { .compatible = "arm,primecell" }
-, { }
+  { .compatible = "arm,pl011" },
+  { .compatible = "arm,primecell" },
+  { }
 };
 
 static const printk_driver_class_t class = {
-  .class_name = "printk_pl011"
-, .matches = matches
-, .init = &init
-, .putc = &putc
+  .class_name = "printk_pl011",
+  .matches    = matches,
+  .init       = &printk_pl011_init,
+  .putc       = &printk_pl011_putc
 };
 
 PRINTK_DRIVER(class)
