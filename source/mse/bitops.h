@@ -13,14 +13,14 @@
 INLINE void  set_bit    (uint32_t *u,
                          int       nth)
 {
-  *u |=  (1 << nth);
+        *u |=  (1 << nth);
 }
 
 /// Turns `nth` bit off.
 INLINE void  clear_bit  (uint32_t *u,
                          int       nth)
 {
-  *u &= ~(1 << nth);
+        *u &= ~(1 << nth);
 }
 
 #endif // !_MSE_BITOPS_H_

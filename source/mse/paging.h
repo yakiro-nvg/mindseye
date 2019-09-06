@@ -7,9 +7,9 @@
 
 /// Physical page allocator.
 typedef struct page_pool_s {
-  uint8_t *pages;
-  uint32_t *bitmap;
-  int num_bitmap;
+        uint8_t *pages;
+        uint32_t *bitmap;
+        int num_bitmap;
 } page_pool_t;
 
 /** Setups a new page pool.

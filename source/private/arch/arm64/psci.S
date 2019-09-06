@@ -3,5 +3,5 @@
 .global psci_smc
 
 psci_smc:
-  smc #0
-  ret
+        smc #0
+        ret

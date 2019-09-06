@@ -6,6 +6,8 @@ extern constructor_t einit_array[];
 
 void call_constructors()
 {
-  constructor_t *fn = sinit_array;
-  while (fn < einit_array) { (*fn++)(); }
+        constructor_t *fn = sinit_array;
+        while (fn < einit_array) {
+                (*fn++)();
+        }
 }

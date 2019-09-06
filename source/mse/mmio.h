@@ -17,7 +17,7 @@ INLINE void      mmio_write32  (uint64_t  base_address,
 INLINE uint32_t  mmio_read32   (uint64_t  base_address,
                                 int       register_offset)
 {
-	return *((volatile uint32_t*)base_address + register_offset);
+        return *((volatile uint32_t*)base_address + register_offset);
 }
 
 #endif // !_MSE_MMIO_H_

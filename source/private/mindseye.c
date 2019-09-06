@@ -11,9 +11,9 @@ void call_constructors();
 
 void mindseye(const void *fdt)
 {
-  call_constructors();
+        call_constructors();
 
-  printk_setup(fdt);
+        printk_setup(fdt);
 
-  cpu_setup(fdt);
+        cpu_setup(fdt);
 }

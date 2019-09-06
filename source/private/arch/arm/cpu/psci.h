@@ -19,16 +19,16 @@
 
 /// PSCI call result.
 enum {
-  PSCI_RET_SUCCESS          =  0,
-  PSCI_RET_NOT_SUPPORTED    = -1,
-  PSCI_RET_INVALID_PARAMS   = -2,
-  PSCI_RET_DENIED           = -3,
-  PSCI_RET_ALREADY_ON       = -4,
-  PSCI_RET_ON_PENDING       = -5,
-  PSCI_RET_INTERNAL_FAILURE = -6,
-  PSCI_RET_NOT_PRESENT      = -7,
-  PSCI_RET_DISABLED         = -8,
-  PSCI_RET_INVALID_ADDRESS  = -9
+        PSCI_RET_SUCCESS          =  0,
+        PSCI_RET_NOT_SUPPORTED    = -1,
+        PSCI_RET_INVALID_PARAMS   = -2,
+        PSCI_RET_DENIED           = -3,
+        PSCI_RET_ALREADY_ON       = -4,
+        PSCI_RET_ON_PENDING       = -5,
+        PSCI_RET_INTERNAL_FAILURE = -6,
+        PSCI_RET_NOT_PRESENT      = -7,
+        PSCI_RET_DISABLED         = -8,
+        PSCI_RET_INVALID_ADDRESS  = -9
 };
 
 #endif // !_MSE_ARM_CPU_PSCI_H_

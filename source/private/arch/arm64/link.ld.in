@@ -1,41 +1,41 @@
 /* Copyright (c) 2019 Nguyen, Giang (G. Yakiro). All rights reserved.
  * SPDX-License-Identifier: BSD-2-Clause. */
 SECTIONS {
-  . = @load_offset@;
+        . = @load_offset@;
 
-  /* printk buffer */
-  sprintk = .;
-  . = . + @printk_buffer_size@;
-  eprintk = .;
+        /* printk buffer */
+        sprintk = .;
+        . = . + @printk_buffer_size@;
+        eprintk = .;
 
-  .text (@load_offset@ + @text_offset@) : {
-    *(ktext)
-    *(.text*)
-  }
+        .text (@load_offset@ + @text_offset@) : {
+                *(ktext)
+                *(.text*)
+        }
 
-  .init_array : ALIGN(4) {
-    sinit_array = .;
-    *(.init_array)
-    *(SORT_BY_INIT_PRIORITY(.init_array.*))
-    einit_array = .;
-  }
+        .init_array : ALIGN(4) {
+                sinit_array = .;
+                *(.init_array)
+                *(SORT_BY_INIT_PRIORITY(.init_array.*))
+                einit_array = .;
+        }
 
-  .data : {
-    *(.data)
-  }
+        .data : {
+                *(.data)
+        }
 
-  .bss : {
-    *(.bss)
-    *(COMMON)
+        .bss : {
+                *(.bss)
+                *(COMMON)
 
-    /* stack */
-    . = ALIGN(4);
-    estack = .;
-    . = . + @stack_size@;
-    sstack = .;
-  }
+                /* stack */
+                . = ALIGN(4);
+                estack = .;
+                . = . + @stack_size@;
+                sstack = .;
+        }
 
-  .rodata : {
-    *(.rodata*)
-  }
+        .rodata : {
+                *(.rodata*)
+        }
 }

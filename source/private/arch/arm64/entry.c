@@ -12,8 +12,8 @@ static const void *fdt = (const void *)0x40000000;
 
 void entry()
 {
-  printf("\n--=-=-=-=-=-=- Mind's Eye, welcome! -=-=-=-=-=-=--\n");
-  const char *name = fdt_machine_name(fdt) ? : "unknown";
-  pr_info(LOG_TAG, "machine name: %s", name);
-  mindseye(fdt);
+        printf("\n--=-=-=-=-=-=- Mind's Eye, welcome! -=-=-=-=-=-=--\n");
+        const char *name = fdt_machine_name(fdt) ? : "unknown";
+        PR_INFO(LOG_TAG, "machine name: %s", name);
+        mindseye(fdt);
 }

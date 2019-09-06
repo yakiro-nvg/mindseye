@@ -1,31 +1,26 @@
 # Copyright (c) 2019 Nguyen, Giang (G. Yakiro). All rights reserved.
 # SPDX-License-Identifier: BSD-2-Clause.
-option(
-	'board',
-  type: 'string',
-  description: 'Board name',
-  value: 'qemu_virt')
+option( 'board',
+        type: 'string',
+        description: 'Board name',
+        value: 'qemu_virt')
 
-option(
-  'max_cpus',
-  type: 'integer',
-  description: 'Maximum number of CPUs',
-  value: 8)
+option( 'max_cpus',
+        type: 'integer',
+        description: 'Maximum number of CPUs',
+        value: 8)
 
-option(
-  'page_size',
-  type: 'integer',
-  description: 'Page size in bytes',
-  value: 0x1000)
+option( 'page_size',
+        type: 'integer',
+        description: 'Page size in bytes',
+        value: 0x1000)
 
-option(
-  'stack_size',
-  type: 'integer',
-  description: 'C stack size in bytes',
-  value: 0x1000)
+option( 'stack_size',
+        type: 'integer',
+        description: 'C stack size in bytes',
+        value: 0x1000)
 
-option(
-  'printk_buffer_size',
-  type: 'integer',
-  description: 'Print-K buffer size in bytes',
-  value: 0x2000)
+option( 'printk_buffer_size',
+        type: 'integer',
+        description: 'Print-K buffer size in bytes',
+        value: 0x2000)
