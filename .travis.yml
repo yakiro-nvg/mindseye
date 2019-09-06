@@ -14,6 +14,7 @@ before_install:
 
 script:
   - echo FROM dockcross/linux-arm64 > Dockerfile
+  - echo RUN apt install -y meson
   - echo ADD . /root >> Dockerfile
   - docker build -t withgit .
   - docker run withgit /bin/sh -c "cd /root && TRAVIS=true meson --cross-file=cross/aarch64.txt build && ninja -C build"
