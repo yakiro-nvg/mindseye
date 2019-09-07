@@ -21,7 +21,7 @@ addons:
 script:
   - echo FROM yakironvg/mindseye-aarch64 > Dockerfile
   - echo ADD . /root >> Dockerfile
-  - echo RUN /root/sonar.sh
+  - echo RUN /root/sonar.sh >> Dockerfile
   - docker build -t withgit .
   - docker cp withgit:/root/build/bw-output/. bw-output
   - sonar-scanner
