@@ -28,7 +28,7 @@ script:
   - echo RUN /root/coverity.sh >> Dockerfile
   - echo RUN /root/sonar.sh >> Dockerfile
   - docker build -t withgit .
-  - docker run withgit /bin/sh -c "echo run container once"
+  - docker run -e COVERITY_SCAN_TOKEN withgit /bin/sh -c "echo run container once"
   - docker cp $(docker ps -lq):/root/build/bw-output/. bw-output
   - sonar-scanner
   - docker cp $(docker ps -lq):/root/build/mindseye.tgz .
