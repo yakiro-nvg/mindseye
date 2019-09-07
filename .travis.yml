@@ -9,9 +9,6 @@ language:
 services:
   - docker
 
-before_install:
-  - docker pull yakironvg/mindseye-aarch64
-
 env:
   global:
     - secure: "clIG/vjFbFmFhwGEzKkUdZ+hZMaKqrGxsm4IfUtTNDSkjgSsQFyarsoKnvkR+5KQeY0nAVl1aUcGf2ZOyN01qwsfVxeLbuyQD4M7F+A84Y5JTZsEx1mjUZjFJLuEdU+B/UunpZAwz0nMpzC3S8GvDkH6XZ97SPDGRFQwyYQ+mYWnzpIiNkHaFJj8Zwnv/bPkxQOtJhRbVraQGyiFFc/EraXVC3aU9PYh2klSQQzv5m/PmDXaZtEZGOHTjYlgRwKD5RXscrYCK3kvQcDcPmL8GlqB6YRxm+MAo8nTG9Tb7DEkzWBDLijDiFqP+OjMhss3tmgOBZo3gQ3QHzwsHYzcIxlfNgn1C5s9++Jcgjt+ey7mFdQmDvKTURCmd2z6EIUNX/+1HR9C0vAos+jhZUWor0779SbKYDf9Jgi9gjvILhkSPD2NXu3yawvTzWIfmaghhT2WOvkHyb7O6uy/cv8G7LT+2NlpRnn9HtU6Dp/GsJ7BV0a1Cuv2QIE2f0FsBeWp0rqM6oLgmM4HQAqXaHJp38cxie02rP54Y3AQS2WjjcLgvsC7ptV/nJgGzUspbe9RSH+qQ2cQgSnekEeCezW2T+M5rJpSlg2pQRtvmGPl5Mmb71Bqsse+PiWXWtOqso5GuZLNNo0oNDU2bDQxZyOLCQi4s62WFxPawMIcGV3dABs="
@@ -22,13 +19,17 @@ addons:
     token:
       secure: "dqHADRkj1YzxXn7FKHfS3J9vbEoXddBMPmO/2xa2a4Wz8PnoYi57NsS/k/Eiv12KcFgn2P0TIWlRs+xni7zRv+O6AXmZfkUOrxfhXVOQOU8cNmHg7Rpwr9U1Xc+VcckthjTRce6k91izQSlpjrHDuMQBT7QcsiWs9F6sRbmAXKFQ2haryrSbQit3H1RrsO4gXKi398bEbcpx3ovKpyYPs28dwKgn9OC47mmKoAhneb0L5tOSw01XYIgxh5JU1JPQ4uJqQYAimCujskuhbb1mSKHlU8bY3cPcIybqPRi+GOMujGTU6cF1Yi8c4zr+YCEnngAGrXhGOB7o+gBDF17dpqDTsg2rFwwkcrnYszEyNCNrqXiLrQo/Ks/plWSEgien/gRhEmM0YmdncBhjI/sAkAR6nvRY2Km2QsP2m2zjwTcBV0h2jgAGNxe4zbAPUIrpMNlhk/uoOeS/Pn0oxwfjylLyukqcXuLuqcu1jDzrP2QQnYONv6scJ+aHm8kyLlH8lke3n/+KGdF99+p2Te6ryKcDgdTJvUwXD+1vqVdV2wzcz9j4vTSJcvluuSPllqfZ3wDZNYQRaHCEGHCybUbdld9ptJKAJmzjlTRNfp3Qbmn409TL9iqw4yaLX1ZbaV2xNQlrWf7joLGz7AjQMl05ps7/Wli2gvomMczsNYCTSXY="
 
+before_install:
+  - docker pull yakironvg/mindseye-aarch64
+
 script:
   - echo FROM yakironvg/mindseye-aarch64 > Dockerfile
   - echo ADD . /root >> Dockerfile
   - echo RUN /root/coverity.sh >> Dockerfile
   - echo RUN /root/sonar.sh >> Dockerfile
-  - docker build -t withgit .
-  - docker run -e COVERITY_SCAN_TOKEN withgit /bin/sh -c "echo run container once"
+  - docker -e COVERITY_SCAN_TOKEN build -t withgit .
+  - docker run withgit /bin/sh -c "echo run container once"
   - docker cp $(docker ps -lq):/root/build/bw-output/. bw-output
   - sonar-scanner
   - docker cp $(docker ps -lq):/root/build/mindseye.tgz .
+  - if [ "$TRAVIS_BRANCH" == "coverity_scan" ]; then ./coverity_upload.sh fi
