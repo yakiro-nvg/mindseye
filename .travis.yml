@@ -23,12 +23,11 @@ before_install:
   - docker pull yakironvg/mindseye-aarch64
 
 script:
-  - echo COVERITY_SCAN_TOKEN ${COVERITY_SCAN_TOKEN}
   - echo FROM yakironvg/mindseye-aarch64 > Dockerfile
   - echo ADD . /root >> Dockerfile
   - echo RUN /root/coverity.sh >> Dockerfile
   - echo RUN /root/sonar.sh >> Dockerfile
-  - docker build --build-arg COVERITY_SCAN_TOKEN -t withgit .
+  - docker build --build-arg COVERITY_SCAN_TOKEN=$COVERITY_SCAN_TOKEN -t withgit .
   - docker run withgit /bin/sh -c "echo run container once"
   - docker cp $(docker ps -lq):/root/build/bw-output/. bw-output
   - sonar-scanner
