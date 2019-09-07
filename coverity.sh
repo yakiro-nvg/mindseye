@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 mkdir /coverity && cd /coverity
+echo "token = ${COVERITY_SCAN_TOKEN}"
 wget https://scan.coverity.com/download/linux64 --post-data "token=${COVERITY_SCAN_TOKEN}&project=yakiro-nvg%2Fmindseye" -O coverity_tool.tgz
 tar -xzf coverity_tool.tgz
 
