@@ -23,6 +23,7 @@ before_install:
   - docker pull yakironvg/mindseye-aarch64
 
 script:
+  - echo COVERITY_SCAN_TOKEN ${COVERITY_SCAN_TOKEN}
   - echo FROM yakironvg/mindseye-aarch64 > Dockerfile
   - echo ADD . /root >> Dockerfile
   - echo RUN /root/coverity.sh >> Dockerfile
