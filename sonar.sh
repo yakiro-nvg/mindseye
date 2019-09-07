@@ -7,4 +7,4 @@ export TRAVIS=true
 export LD_LIBRARY_PATH="/sonar"
 cd /root
 meson --cross-file=cross/aarch64.txt build
-cd build && /sonar/build-wrapper-linux-x86-64 --out-dir bw-output ninja
+cd build && strace -f -E LD_DEBUG=all /sonar/build-wrapper-linux-x86-64 --out-dir bw-output ninja
