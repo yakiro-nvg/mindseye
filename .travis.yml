@@ -27,9 +27,9 @@ script:
   - echo ADD . /root >> Dockerfile
   - echo RUN /root/coverity.sh >> Dockerfile
   - echo RUN /root/sonar.sh >> Dockerfile
-  - docker -e COVERITY_SCAN_TOKEN build -t withgit .
+  - docker build -e COVERITY_SCAN_TOKEN -t withgit .
   - docker run withgit /bin/sh -c "echo run container once"
   - docker cp $(docker ps -lq):/root/build/bw-output/. bw-output
   - sonar-scanner
   - docker cp $(docker ps -lq):/root/build/mindseye.tgz .
-  - if [ "$TRAVIS_BRANCH" == "coverity_scan" ]; then ./coverity_upload.sh fi
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then ./coverity_upload.sh fi
