@@ -12,8 +12,15 @@ services:
 before_install:
   - docker pull yakironvg/mindseye-aarch64
 
+addons:
+  sonarcloud:
+    organization: "yakiro-nvg"
+    token:
+      secure: "dqHADRkj1YzxXn7FKHfS3J9vbEoXddBMPmO/2xa2a4Wz8PnoYi57NsS/k/Eiv12KcFgn2P0TIWlRs+xni7zRv+O6AXmZfkUOrxfhXVOQOU8cNmHg7Rpwr9U1Xc+VcckthjTRce6k91izQSlpjrHDuMQBT7QcsiWs9F6sRbmAXKFQ2haryrSbQit3H1RrsO4gXKi398bEbcpx3ovKpyYPs28dwKgn9OC47mmKoAhneb0L5tOSw01XYIgxh5JU1JPQ4uJqQYAimCujskuhbb1mSKHlU8bY3cPcIybqPRi+GOMujGTU6cF1Yi8c4zr+YCEnngAGrXhGOB7o+gBDF17dpqDTsg2rFwwkcrnYszEyNCNrqXiLrQo/Ks/plWSEgien/gRhEmM0YmdncBhjI/sAkAR6nvRY2Km2QsP2m2zjwTcBV0h2jgAGNxe4zbAPUIrpMNlhk/uoOeS/Pn0oxwfjylLyukqcXuLuqcu1jDzrP2QQnYONv6scJ+aHm8kyLlH8lke3n/+KGdF99+p2Te6ryKcDgdTJvUwXD+1vqVdV2wzcz9j4vTSJcvluuSPllqfZ3wDZNYQRaHCEGHCybUbdld9ptJKAJmzjlTRNfp3Qbmn409TL9iqw4yaLX1ZbaV2xNQlrWf7joLGz7AjQMl05ps7/Wli2gvomMczsNYCTSXY="
+
 script:
   - echo FROM yakironvg/mindseye-aarch64 > Dockerfile
   - echo ADD . /root >> Dockerfile
   - docker build -t withgit .
   - docker run withgit /bin/sh -c "cd /root && TRAVIS=true meson --cross-file=cross/aarch64.txt build && ninja -C build"
+  - sonar-scanner
