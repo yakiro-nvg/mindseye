@@ -59,9 +59,9 @@ void cpu_setup(const void *fdt)
 
 const cpu_driver_class_t* cpu_driver(int idx)
 {
-        if (idx > MAX_CPUS) {
-                return NULL;
-        } else {
+        if (idx < MAX_CPUS) {
                 return driver_per_cpu[idx];
+        } else {
+                return NULL;
         }
 }
