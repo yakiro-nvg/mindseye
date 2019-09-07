@@ -1,0 +1,19 @@
+sudo: false
+
+os:
+  - linux
+
+language:
+  - c
+
+services:
+  - docker
+
+before_install:
+  - docker pull yakironvg/mindseye-aarch64
+
+script:
+  - echo FROM yakironvg/mindseye-aarch64 > Dockerfile
+  - echo ADD . /root >> Dockerfile
+  - docker build -t withgit .
+  - docker run withgit /bin/sh -c "cd /root && TRAVIS=true meson --cross-file=cross/aarch64.txt build && ninja -C build"
