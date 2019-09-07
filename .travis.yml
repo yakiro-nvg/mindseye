@@ -23,7 +23,7 @@ script:
   - echo ADD . /root >> Dockerfile
   - docker build -t withgit .
   - docker run withgit /bin/sh -c "mkdir /sonar && cd /sonar &&
-    wget https://sonarcloud.io/static/cpp/build-wrapper-linux-x86-64.zip
+    wget https://sonarcloud.io/static/cpp/build-wrapper-linux-x86-64.zip &&
     unzip -j build-wrapper-linux-x86-64.zip -d"
   - docker run withgit /bin/sh -c "cd /root && TRAVIS=true
     meson --cross-file=cross/aarch64.txt build &&
