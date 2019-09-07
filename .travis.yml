@@ -24,7 +24,7 @@ script:
   - docker build -t withgit .
   - docker run withgit /bin/sh -c "mkdir /sonar && cd /sonar &&
     wget https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip &&
-    unzip -j build-wrapper-linux-x86.zip -d"
+    unzip -j build-wrapper-linux-x86.zip"
   - docker run withgit /bin/sh -c "cd /root && TRAVIS=true
     meson --cross-file=cross/aarch64.txt build &&
     cd build && /sonar/build-wrapper-linux-x86-64 --out-dir bw-output ninja"
