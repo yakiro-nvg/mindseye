@@ -23,6 +23,6 @@ script:
   - echo ADD . /root >> Dockerfile
   - echo RUN /root/sonar.sh >> Dockerfile
   - docker build -t withgit .
-  - docker run withgit ls
+  - docker run withgit /bin/sh -c "echo run container once"
   - docker cp $(docker ps -lq):/root/build/bw-output/. bw-output
   - sonar-scanner
