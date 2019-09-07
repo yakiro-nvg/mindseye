@@ -33,4 +33,4 @@ script:
   - docker cp $(docker ps -lq):/root/build/bw-output/. bw-output
   - sonar-scanner
   - docker cp $(docker ps -lq):/root/build/mindseye.tgz .
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then ./coverity_upload.sh fi
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then ./coverity_upload.sh; fi
