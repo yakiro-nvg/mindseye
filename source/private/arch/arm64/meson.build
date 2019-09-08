@@ -1,6 +1,6 @@
 # Copyright (c) 2019 Nguyen, Giang (G. Yakiro). All rights reserved.
 # SPDX-License-Identifier: BSD-2-Clause.
-add_project_arguments('-DMSE_ARM64', language : 'c')
+add_project_arguments('-DMSE_ARM64', language : [ 'c', 'objc' ])
 
 link_conf_data = configuration_data({
         'load_offset': load_offset,
@@ -16,7 +16,7 @@ configure_file(
 mindseye_srcs += [
         files(
                 'entry.S',
-                'entry.c',
+                'entry.m',
                 'psci.S'
         )
 ]

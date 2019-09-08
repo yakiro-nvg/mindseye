@@ -3,7 +3,7 @@
 #ifndef _MSE_MMIO_H_
 #define _MSE_MMIO_H_
 
-#include <mse/prereq.h>
+#import <mse/prereq.h>
 
 /// 32 bits memory mapped register write.
 INLINE void      mmio_write32  (uint64_t  base_address,

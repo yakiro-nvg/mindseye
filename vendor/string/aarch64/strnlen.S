@@ -26,6 +26,10 @@
    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
    OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
+#if (defined (__OPTIMIZE_SIZE__) || defined (PREFER_SIZE_OVER_SPEED))
+/* See strlen-stub.c  */
+#else
+
 /* Assumptions:
  *
  * ARMv8-a, AArch64
@@ -179,3 +183,5 @@ def_fn strnlen
 	csel	data2, data2, data2a, le
 	b	.Lrealigned
 	.size	strnlen, . - .Lstart	/* Include pre-padding in size.  */
+
+#endif

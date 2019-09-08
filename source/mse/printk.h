@@ -3,9 +3,9 @@
 #ifndef _MSE_PRINTK_H_
 #define _MSE_PRINTK_H_
 
-#include <mse/prereq.h>
-#include <mse/list.h>
-#include <mse/driver.h>
+#import <mse/prereq.h>
+#import <mse/list.h>
+#import <mse/driver.h>
 
 /// Print-K driver context.
 typedef void printk_driver_context_t;

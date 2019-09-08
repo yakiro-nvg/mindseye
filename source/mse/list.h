@@ -3,7 +3,7 @@
 #ifndef _MSE_LIST_H_
 #define _MSE_LIST_H_
 
-#include <mse/prereq.h>
+#import <mse/prereq.h>
 
 /// Intrusive linked list node.
 typedef struct list_node_s {

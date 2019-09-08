@@ -5,18 +5,23 @@ mindseye_include_directories = [
 ]
 
 mindseye_srcs = [
-        'private/cpu.c',
-        'private/ctors.c',
-        'private/errno.c',
-        'private/fdt.c',
-        'private/mindseye.c',
-        'private/paging.c',
-        'private/printk.c'
+        'private/cpu.m',
+        'private/ctors.m',
+        'private/errno.m',
+        'private/fdt.m',
+        'private/mindseye.m',
+        'private/paging.m',
+        'private/printk.m'
 ]
 
 mindseye_c_args = [
         '-ffreestanding',
-        '-fno-function-sections'
+        '-fno-function-sections',
+        '-fno-exceptions'
+]
+
+mindseye_objc_args = [
+        '-std=c11'
 ]
 
 mindseye_link_args = [
@@ -25,6 +30,7 @@ mindseye_link_args = [
 
 subdir('private/boards')
 subdir('private/arch')
+subdir('private/objcrt')
 subdir('private/printk')
 
 conf_data = configuration_data({
@@ -41,6 +47,10 @@ executable(
         'mindseye',
         [ mindseye_srcs, vendor_srcs ],
         c_args: mindseye_c_args,
+        objc_args: [
+                mindseye_c_args,
+                mindseye_objc_args
+        ],
         link_args: mindseye_link_args,
         include_directories: [
                 mindseye_include_directories,

@@ -3,8 +3,8 @@
 #ifndef _MSE_CPU_H_
 #define _MSE_CPU_H_
 
-#include <mse/prereq.h>
-#include <mse/list.h>
+#import <mse/prereq.h>
+#import <mse/list.h>
 
 /// CPU driver class.
 typedef struct cpu_driver_class_s {

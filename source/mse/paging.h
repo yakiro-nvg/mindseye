@@ -3,7 +3,7 @@
 #ifndef _MSE_PAGING_H_
 #define _MSE_PAGING_H_
 
-#include <mse/prereq.h>
+#import <mse/prereq.h>
 
 /// Physical page allocator.
 typedef struct page_pool_s {

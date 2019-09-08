@@ -1,4 +1,4 @@
-/* Copyright (c) 2012, 2018, Linaro Limited
+/* Copyright (c) 2012-2018, Linaro Limited
    All rights reserved.
 
    Redistribution and use in source and binary forms, with or without
@@ -28,6 +28,10 @@
  *
  * ARMv8-a, AArch64
  */
+
+#if (defined (__OPTIMIZE_SIZE__) || defined (PREFER_SIZE_OVER_SPEED))
+/* See strcmp-stub.c  */
+#else
 
 	.macro def_fn f p2align=0
 	.text
@@ -193,3 +197,6 @@ L(loop_misaligned):
 L(done):
 	sub	result, data1, data2
 	ret
+	.size	strcmp, .-strcmp
+
+#endif

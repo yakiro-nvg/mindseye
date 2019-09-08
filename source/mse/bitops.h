@@ -3,10 +3,10 @@
 #ifndef _MSE_BITOPS_H_
 #define _MSE_BITOPS_H_
 
-#include <mse/prereq.h>
+#import <mse/prereq.h>
 
 #ifdef MSE_ARM
-#include <mse/arm/bitops.h>
+#import <mse/arm/bitops.h>
 #endif
 
 /// Turns `nth` bit on.

@@ -3,7 +3,7 @@
 #ifndef _MSE_MINDSEYE_H_
 #define _MSE_MINDSEYE_H_
 
-#include <mse/prereq.h>
+#import <mse/prereq.h>
 
 /// Portable entrypoint.
 void mindseye(const void *fdt);

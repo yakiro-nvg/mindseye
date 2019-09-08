@@ -1,12 +1,12 @@
 /* Copyright (c) 2019 Nguyen, Giang (G. Yakiro). All rights reserved.
  * SPDX-License-Identifier: BSD-2-Clause. */
-#include "psci.h"
+#import "psci.h"
 
-#include <mse/cpu.h>
-#include <mse/driver.h>
-#include <mse/fdt.h>
-#include <mse/printk.h>
-#include <mse/arm/psci.h>
+#import <mse/cpu.h>
+#import <mse/driver.h>
+#import <mse/fdt.h>
+#import <mse/printk.h>
+#import <mse/arm/psci.h>
 
 #define LOG_TAG "cpu_psci"
 

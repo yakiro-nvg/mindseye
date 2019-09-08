@@ -3,9 +3,9 @@
 #ifndef _MSE_FDT_H_
 #define _MSE_FDT_H_
 
-#include <mse/prereq.h>
-#include <mse/driver.h>
-#include <libfdt.h>
+#import <mse/prereq.h>
+#import <mse/driver.h>
+#import <libfdt.h>
 
 /// Returns machine name.
 const char*   fdt_machine_name  (const void             *fdt);

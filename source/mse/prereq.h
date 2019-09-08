@@ -3,10 +3,10 @@
 #ifndef _MSE_PREREQ_H_
 #define _MSE_PREREQ_H_
 
-#include <stdint.h>
-#include <stdbool.h>
-#include <stddef.h>
-#include <mse/errno.h>
+#import <stdint.h>
+#import <stdbool.h>
+#import <stddef.h>
+#import <mse/errno.h>
 
 #define INLINE static inline
 #define UNUSED(x) (void)(x)

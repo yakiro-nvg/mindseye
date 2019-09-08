@@ -1,9 +1,9 @@
 /* Copyright (c) 2019 Nguyen, Giang (G. Yakiro). All rights reserved.
  * SPDX-License-Identifier: BSD-2-Clause. */
-#include <mse/fdt.h>
+#import <mse/fdt.h>
 
-#include <endianness.h>
-#include <mse/printk.h>
+#import <endianness.h>
+#import <mse/printk.h>
 
 #define LOG_TAG "fdt"
 

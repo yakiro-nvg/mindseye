@@ -1,6 +1,6 @@
 /* Copyright (c) 2019 Nguyen, Giang (G. Yakiro). All rights reserved.
  * SPDX-License-Identifier: BSD-2-Clause. */
-#include <mse/printk.h>
+#import <mse/printk.h>
 
 static int printk_null_init(
   printk_driver_context_t *mem,

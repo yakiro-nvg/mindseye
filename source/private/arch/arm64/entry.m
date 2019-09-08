@@ -1,9 +1,9 @@
 /* Copyright (c) 2019 Nguyen, Giang (G. Yakiro). All rights reserved.
  * SPDX-License-Identifier: BSD-2-Clause. */
-#include <mse/mindseye.h>
-#include <mse/printk.h>
-#include <mse/fdt.h>
-#include <printf.h>
+#import <mse/mindseye.h>
+#import <mse/printk.h>
+#import <mse/fdt.h>
+#import <printf.h>
 
 #define LOG_TAG "arm64"
 

@@ -1,6 +1,6 @@
 /* Copyright (c) 2019 Nguyen, Giang (G. Yakiro). All rights reserved.
  * SPDX-License-Identifier: BSD-2-Clause. */
-#include <mse/errno.h>
+#import <mse/errno.h>
 
 const char* error_name(error_t ec)
 {

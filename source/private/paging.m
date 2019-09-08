@@ -1,10 +1,10 @@
 /* Copyright (c) 2019 Nguyen, Giang (G. Yakiro). All rights reserved.
  * SPDX-License-Identifier: BSD-2-Clause. */
-#include <mse/paging.h>
+#import <mse/paging.h>
 
-#include <config.h>
-#include <string.h>
-#include <mse/bitops.h>
+#import <config.h>
+#import <string.h>
+#import <mse/bitops.h>
 
 void page_pool_setup(page_pool_t *pool, uint8_t *pages, uint32_t *bitmap, int capacity)
 {

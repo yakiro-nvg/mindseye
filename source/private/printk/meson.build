@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: BSD-2-Clause.
 mindseye_srcs += [
         files(
-                'null.c',
-                'pl011.c'
+                'null.m',
+                'pl011.m'
         )
 ]

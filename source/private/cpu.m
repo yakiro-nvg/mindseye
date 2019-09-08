@@ -1,11 +1,11 @@
 /* Copyright (c) 2019 Nguyen, Giang (G. Yakiro). All rights reserved.
  * SPDX-License-Identifier: BSD-2-Clause. */
-#include <mse/cpu.h>
+#import <mse/cpu.h>
 
-#include <config.h>
-#include <string.h>
-#include <mse/fdt.h>
-#include <mse/printk.h>
+#import <config.h>
+#import <string.h>
+#import <mse/fdt.h>
+#import <mse/printk.h>
 
 #define LOG_TAG "cpu"
 

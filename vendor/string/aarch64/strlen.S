@@ -24,6 +24,10 @@
    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
    OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
+#if (defined (__OPTIMIZE_SIZE__) || defined (PREFER_SIZE_OVER_SPEED))
+/* See strlen-stub.c  */
+#else
+
 /* Assumptions:
  *
  * ARMv8-a, AArch64, unaligned accesses, min page size 4k.
@@ -231,3 +235,4 @@ L(page_cross):
 	b	L(page_cross_entry)
 
 	.size	strlen, . - strlen
+#endif

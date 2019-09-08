@@ -1,9 +1,9 @@
 /* Copyright (c) 2019 Nguyen, Giang (G. Yakiro). All rights reserved.
  * SPDX-License-Identifier: BSD-2-Clause. */
-#include <mse/printk.h>
+#import <mse/printk.h>
 
-#include <mse/mmio.h>
-#include <mse/fdt.h>
+#import <mse/mmio.h>
+#import <mse/fdt.h>
 
 #define LOG_TAG "printk_pl011"
 
