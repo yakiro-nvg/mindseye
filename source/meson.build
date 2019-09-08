@@ -21,7 +21,8 @@ mindseye_c_args = [
 ]
 
 mindseye_objc_args = [
-        '-std=c11'
+        '-std=c11',
+        '-fobjc-runtime=objfw'
 ]
 
 mindseye_link_args = [

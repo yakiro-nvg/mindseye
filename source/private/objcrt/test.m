@@ -6,6 +6,5 @@
 
 void __objc_exec_class(void *module)
 {
-        while (1) { }
         (void)(module);
 }
