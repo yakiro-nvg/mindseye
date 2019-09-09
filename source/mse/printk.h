@@ -74,9 +74,9 @@ void  pr_fatal      (const char *log_tag,
                      const char *format,
                      ...);
 
-#define PR_INFO(...) pr_info(LOG_TAG, __VA_ARGS__)
+#define PR_INFO(...)    pr_info(LOG_TAG, __VA_ARGS__)
 #define PR_WARNING(...) pr_warning(LOG_TAG, __VA_ARGS__)
-#define PR_ERROR(...) pr_error(LOG_TAG, __VA_ARGS__)
-#define PR_FATAL(...) pr_fatal(LOG_TAG, __VA_ARGS__)
+#define PR_ERROR(...)   pr_error(LOG_TAG, __VA_ARGS__)
+#define PR_FATAL(...)   pr_fatal(LOG_TAG, __VA_ARGS__)
 
 #endif // !_MSE_PRINTK_H_

@@ -5,6 +5,8 @@
 #import <mse/cpu.h>
 #import <mse/printk.h>
 
+#import <mse/objcrt.h>
+
 #define LOG_TAG "entry"
 
 void call_constructors();

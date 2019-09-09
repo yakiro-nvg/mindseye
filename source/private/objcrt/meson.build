@@ -1,5 +1,9 @@
 mindseye_srcs += [
         files(
-                'test.m'
+                'category.m',
+                'class.m',
+                'init.m',
+                'selector.m',
+                'static.m'
         )
 ]

@@ -9,7 +9,7 @@
 INLINE int count_leading_zeros(uint32_t u)
 {
         uint32_t v;
-        __asm volatile ("clz %0, %1" : "=r" (v) : "r" (u));
+        __asm volatile ("clz %w0, %w1" : "=r" (v) : "r" (u));
         return (int)v;
 }
 

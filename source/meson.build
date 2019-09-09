@@ -10,6 +10,7 @@ mindseye_srcs = [
         'private/errno.m',
         'private/fdt.m',
         'private/mindseye.m',
+        'private/object.m',
         'private/paging.m',
         'private/printk.m'
 ]
@@ -29,9 +30,9 @@ mindseye_link_args = [
         '-nostdlib'
 ]
 
+subdir('private/objcrt')
 subdir('private/boards')
 subdir('private/arch')
-subdir('private/objcrt')
 subdir('private/printk')
 
 conf_data = configuration_data({
