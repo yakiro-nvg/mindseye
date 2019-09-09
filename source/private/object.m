@@ -2,7 +2,14 @@
  * SPDX-License-Identifier: BSD-2-Clause. */
 #import <mse/object.h>
 
+#import <mse/objcrt.h>
+
 @implementation MEObject
+
+- (Class)class
+{
+        return object_getClass(self);
+}
 
 + (Class)class
 {
