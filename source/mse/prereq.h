@@ -10,5 +10,19 @@
 
 #define INLINE static inline
 #define UNUSED(x) (void)(x)
+#define CONSTRUCTOR __attribute__((constructor))
+#define ROOT_CLASS __attribute__((__objc_root_class__))
+
+#define YES true
+#define NO false
+typedef bool BOOL;
+
+#define Nil (Class)0
+#define nil (id)0
+
+typedef struct objc_class_s* Class;
+typedef struct objc_object_s* id;
+typedef const struct objc_selector_s* SEL;
+
 
 #endif // !_MSE_PREREQ_H_

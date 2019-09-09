@@ -7,25 +7,25 @@
 
 /// Physical page allocator.
 typedef struct page_pool_s {
-        uint8_t *pages;
-        uint32_t *bitmap;
-        int num_bitmap;
+        uint8_t*    _Nullable   pages;
+        uint32_t*   _Nullable   bitmap;
+        int                     num_bitmap;
 } page_pool_t;
 
 /** Setups a new page pool.
 @param pages: must be aligned on PAGE_SIZE.
 @param bitmap: number of bitmap = capacity / 32 (bits). */
-void  page_pool_setup (page_pool_t  *pool,
-                       uint8_t      *pages,
-                       uint32_t     *bitmap,
-                       int           capacity);
+void                page_pool_setup   (page_pool_t*   _Nonnull   pool,
+                                       uint8_t*       _Nonnull   pages,
+                                       uint32_t*      _Nonnull   bitmap,
+                                       int                       capacity);
 
 /** Allocates a new page.
 \return NULL if out-of-memory. */
-void* page_pool_take  (page_pool_t  *pool);
+void*   _Nullable   page_pool_take    (page_pool_t*   _Nonnull   pool);
 
 /// Returns `page` to pool.
-void  page_pool_drop  (page_pool_t  *pool,
-                       void         *page);
+void                page_pool_drop    (page_pool_t*   _Nonnull   pool,
+                                       void*          _Nonnull   page);
 
 #endif // !_MSE_PAGING_H_

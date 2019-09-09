@@ -5,15 +5,17 @@
 
 #import <mse/prereq.h>
 
+/* TODO: consider remove it. */
+
 /// Intrusive linked list node.
 typedef struct list_node_s {
-        struct list_node_s* next;
-        struct list_node_s* prev;
+        struct list_node_s* _Nullable next;
+        struct list_node_s* _Nullable prev;
 } list_node_t;
 
 /// Adds `node` to back.
-INLINE void list_push_back(list_node_t *root,
-                           list_node_t *node)
+INLINE void list_push_back(list_node_t* _Nonnull root,
+                           list_node_t* _Nonnull node)
 {
         node->next = root->next;
         node->prev = root;

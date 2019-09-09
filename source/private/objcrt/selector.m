@@ -15,24 +15,12 @@ void objc_register_selectors(objc_abi_symtab_t *symtab)
         // we don't need to register it
 }
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wcast-of-sel-type"
-
-bool sel_isEqual(SEL lhs, SEL rhs)
+BOOL sel_isEqual(SEL lhs, SEL rhs)
 {
-        objc_abi_selector_t *l = (objc_abi_selector_t*)lhs;
-        objc_abi_selector_t *r = (objc_abi_selector_t*)rhs;
-        return l == r || strcmp(l->method, r->method) == 0;
+        return lhs == rhs || strcmp(lhs->method, rhs->method) == 0;
 }
 
 const char* sel_getName(SEL sel)
 {
-        return ((objc_abi_selector_t*)sel)->method;
+        return sel->method;
 }
-
-void sel_borrow(dynamic_sel_t *dysel, const char *method)
-{
-        dysel->_ = method;
-}
-
-#pragma clang diagnostic pop

@@ -3,6 +3,8 @@
 #ifndef _MSE_DRIVER_H_
 #define _MSE_DRIVER_H_
 
+/* TODO: rewrite this with objc. */
+
 /// Driver matcher.
 typedef struct driver_match_s {
         const char *compatible;

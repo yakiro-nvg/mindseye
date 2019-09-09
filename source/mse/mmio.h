@@ -10,7 +10,7 @@ INLINE void      mmio_write32  (uint64_t  base_address,
                                 int       register_offset,
                                 uint32_t  value)
 {
-  *((volatile uint32_t*)base_address + register_offset) = value;
+        *((volatile uint32_t*)base_address + register_offset) = value;
 }
 
 /// 32 bits memory mapped register read.

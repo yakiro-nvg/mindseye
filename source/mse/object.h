@@ -3,15 +3,17 @@
 #ifndef _MSE_OBJECT_H_
 #define _MSE_OBJECT_H_
 
+#include <mse/prereq.h>
+
 /// Mind's Eye root class.
-__attribute__((__objc_root_class__))
-@interface MEObject
+ROOT_CLASS @interface MEObject
+{
+@private
+        Class isa;
+}
 
-/// Returns the class.
-+ (Class) class;
-
-/// Returns receiver's class.
-- (Class) class;
+/// Returns the class object.
++ (Class)class;
 
 @end
 

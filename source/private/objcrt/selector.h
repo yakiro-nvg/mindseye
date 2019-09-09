@@ -6,6 +6,6 @@
 #import <mse/prereq.h>
 #import "types.h"
 
-void objc_register_selectors(objc_abi_symtab_t *symtab);
+void objc_register_selectors(objc_abi_symtab_t* _Nonnull symtab);
 
 #endif // !_MSE_OBJCRT_SELECTOR_H_

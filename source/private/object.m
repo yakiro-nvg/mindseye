@@ -3,18 +3,10 @@
 #import <mse/object.h>
 
 @implementation MEObject
-{
-        Class isa;
-}
 
-+ (Class) class
++ (Class)class
 {
         return self;
-}
-
-- (Class) class
-{
-        return isa;
 }
 
 @end

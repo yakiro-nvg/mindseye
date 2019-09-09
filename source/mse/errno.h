@@ -22,6 +22,6 @@ typedef enum {
 } error_t;
 
 /// Returns human readable error.
-const char* error_name(error_t ec);
+const char* _Nonnull error_name(error_t ec);
 
 #endif // !_MSE_ERRNO_H_

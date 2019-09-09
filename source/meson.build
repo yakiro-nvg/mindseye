@@ -16,13 +16,14 @@ mindseye_srcs = [
 ]
 
 mindseye_c_args = [
+        '-std=c11',
         '-ffreestanding',
         '-fno-function-sections',
-        '-fno-exceptions'
+        '-mno-red-zone'
 ]
 
 mindseye_objc_args = [
-        '-std=c11',
+        '-fobjc-arc',
         '-fobjc-runtime=objfw'
 ]
 
