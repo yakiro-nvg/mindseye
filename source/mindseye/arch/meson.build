@@ -12,6 +12,4 @@ else
         error('unknown architecture: ' + cpu)
 endif
 
-mindseye_link_args += [
-        '-Wl,-T,@0@/@1@'.format(
-                meson.current_build_dir(), arch_name/'link.ld')]
+mindseye_link_args += [ '-Wl,-T,@0@/@1@'.format(meson.current_build_dir(), arch_name/'link.ld') ]

@@ -5,15 +5,23 @@
 
 #include <mse/prereq.h>
 
-/// Mind's Eye root class.
-ROOT_CLASS @interface MEObject
+/// Root protocol.
+@protocol MEObject
+
+/// Increases the retain count.
+- (instancetype)retain;
+
+/// Decreases the retain count.
+- (void)release;
+
+@end
+
+/// Root class.
+ROOT_CLASS @interface MEObject <MEObject>
 {
 @private
         Class isa;
 }
-
-/// Returns the class object.
-+ (Class)class;
 
 @end
 

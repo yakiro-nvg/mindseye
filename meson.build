@@ -7,9 +7,7 @@ project(
                 'c_std=gnu11',
                 'b_staticpic=false',
                 'b_lto=false',
-                'b_asneeded=false'
-        ]
-)
+                'b_asneeded=false' ])
 
 subdir('vendor')
 subdir('source')

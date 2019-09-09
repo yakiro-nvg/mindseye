@@ -75,7 +75,7 @@ static error_t parse_fdt(const void *fdt)
                 ctx.fid_cpu_on  = parse_fdt_fid(fdt, "cpu_on",  psci);
                 ctx.fid_cpu_off = parse_fdt_fid(fdt, "cpu_off", psci);
         } else {
-#ifdef MSE_ARM64
+#ifdef __aarch64__
                 ctx.fid_cpu_on  = PSCI_FN64_CPU_ON;
 #else
                 ctx.fid_cpu_on  = PSCI_FN32_CPU_ON;

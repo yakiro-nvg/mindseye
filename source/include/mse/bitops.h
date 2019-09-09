@@ -5,7 +5,7 @@
 
 #import <mse/prereq.h>
 
-#ifdef MSE_ARM
+#if defined(__arm__) || defined(__aarch64__)
 #import <mse/arm/bitops.h>
 #endif
 

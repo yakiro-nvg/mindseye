@@ -14,5 +14,5 @@ void objc_register_classes(objc_abi_symtab_t *symtab)
 
 Class object_getClass(id obj)
 {
-        return obj ? ((__bridge objc_object_t*)obj)->isa : Nil;
+        return obj ? obj->isa : Nil;
 }

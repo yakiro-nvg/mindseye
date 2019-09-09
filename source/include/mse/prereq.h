@@ -17,12 +17,11 @@
 #define NO false
 typedef bool BOOL;
 
-#define Nil (Class)0
-#define nil (id)0
-
 typedef struct objc_class_s* Class;
 typedef struct objc_object_s* id;
 typedef const struct objc_selector_s* SEL;
 
+#define Nil (Class)0
+#define nil (id)0
 
 #endif // !_MSE_PREREQ_H_
