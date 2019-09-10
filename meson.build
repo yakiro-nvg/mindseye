@@ -13,6 +13,7 @@ c_args = [
         '-mno-red-zone' ]
 
 objc_args = [
+        c_args,
         '-fobjc-arc',
         '-fobjc-runtime=objfw' ]
 

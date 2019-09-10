@@ -10,7 +10,10 @@ mindseye_srcs = [ files(
         'printk.m') ]
 
 mindseye_c_args = [ ]
-mindseye_objc_args = [ ]
+
+mindseye_objc_args = [
+        mindseye_c_args ]
+
 mindseye_link_args = [ ]
 
 subdir('boards')
@@ -33,9 +36,7 @@ executable(
                 c_args,
                 mindseye_c_args ],
         objc_args: [
-                c_args,
                 objc_args,
-                mindseye_c_args,
                 mindseye_objc_args ],
         link_args: [
                 link_args,

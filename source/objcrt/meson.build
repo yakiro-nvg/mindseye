@@ -7,12 +7,10 @@ objcrt_srcs = [ files(
         'selector.m',
         'static.m') ]
 
-build_target(
+objcrt = build_target(
         'objcrt',
         objcrt_srcs,
-        c_args: c_args,
         objc_args: [
-                c_args,
                 objc_args,
                 '-fno-objc-arc' ],
         include_directories: [

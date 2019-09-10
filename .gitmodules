@@ -1,0 +1,3 @@
+[submodule "vendor/freestanding/libc"]
+	path = vendor/freestanding/libc
+	url = https://github.com/embeddedartistry/libc.git
