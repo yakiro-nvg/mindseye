@@ -43,4 +43,5 @@ executable(
                 mindseye_link_args ],
         include_directories: [
                 '../include',
-                vendor_include_directories ])
+                vendor_include_directories ],
+        link_with: objcrt)
