@@ -12,6 +12,8 @@
 #define UNUSED(x) (void)(x)
 #define CONSTRUCTOR __attribute__((constructor))
 #define ROOT_CLASS __attribute__((__objc_root_class__))
+#define ASSUME_NONNULL_BEGIN _Pragma("clang assume_nonnull begin")
+#define ASSUME_NONNULL_END _Pragma("clang assume_nonnull end")
 
 #define YES true
 #define NO false

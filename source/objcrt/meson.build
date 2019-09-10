@@ -1,12 +1,11 @@
-objcrt_srcs = [
-        files(
-                'arc.m',
-                'category.m',
-                'class.m',
-                'init.m',
-                'object.m',
-                'selector.m',
-                'static.m') ]
+objcrt_srcs = [ files(
+        'arc.m',
+        'category.m',
+        'class.m',
+        'init.m',
+        'object.m',
+        'selector.m',
+        'static.m') ]
 
 build_target(
         'objcrt',
@@ -15,8 +14,7 @@ build_target(
         objc_args: [
                 c_args,
                 objc_args,
-                '-fno-objc-arc'
-        ],
+                '-fno-objc-arc' ],
         include_directories: [
                 '../include',
                 vendor_include_directories ],

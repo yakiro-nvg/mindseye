@@ -1,14 +1,13 @@
 # Copyright (c) 2019 Nguyen, Giang (G. Yakiro). All rights reserved.
 # SPDX-License-Identifier: BSD-2-Clause.
-mindseye_srcs = [
-        files(
-                'cpu.m',
-                'ctors.m',
-                'errno.m',
-                'fdt.m',
-                'mindseye.m',
-                'paging.m',
-                'printk.m') ]
+mindseye_srcs = [ files(
+        'cpu.m',
+        'ctors.m',
+        'errno.m',
+        'fdt.m',
+        'mindseye.m',
+        'paging.m',
+        'printk.m') ]
 
 mindseye_c_args = [ ]
 mindseye_objc_args = [ ]

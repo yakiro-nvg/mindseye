@@ -2,6 +2,8 @@
  * SPDX-License-Identifier: BSD-2-Clause. */
 #import "types.h"
 
+#import <mse/object.h>
+
 id _Nullable objc_retain(id _Nullable obj)
 {
         return [obj retain];

@@ -5,6 +5,8 @@
 
 #include <mse/prereq.h>
 
+ASSUME_NONNULL_BEGIN
+
 /// Root protocol.
 @protocol MEObject
 
@@ -24,5 +26,7 @@ ROOT_CLASS @interface MEObject <MEObject>
 }
 
 @end
+
+ASSUME_NONNULL_END
 
 #endif // !_MSE_OBJECT_H_
