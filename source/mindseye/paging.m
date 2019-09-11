@@ -4,8 +4,8 @@
 
 #import <config.h>
 #import <string.h>
-#import <stdatomic.h>
 #import <mse/bitops.h>
+#import <mse/spinlock.h>
 #import <mse/printk.h>
 #import <mse/fdt.h>
 
@@ -27,11 +27,11 @@ typedef uint64_t bitmap_t;
 
 enum { BITMAP_BITS = sizeof(bitmap_t)*8 };
 
-/// Physical page allocator.
 static struct page_pool_s {
         uint8_t*    _Nonnull   pages;
         int                    num_pages;
         bitmap_t*   _Nonnull   bitmaps;
+        spinlock_t             lock;
 } pool __attribute__((section("shared")));
 
 static error_t parse_fdt(const void* fdt)
@@ -60,6 +60,7 @@ size_t page_pool_setup(const void* fdt)
                 return ec;
         } else {
                 PR_INFO("discovered %d pages * %d bytes", pool.num_pages, PAGE_SIZE);
+                spinlock_init(&pool.lock);
                 return (size_t)pool.pages;
         }
 }
@@ -75,8 +76,6 @@ void page_pool_setup_mark(int num)
         const uint8_t* bitmaps_end = align_forward(pool.bitmaps + num_bitmaps, PAGE_SIZE);
         num = (bitmaps_end - pool.pages) / PAGE_SIZE; // will mark this buffer as used also
 
-        PR_INFO("used %d pages", num);
-
         // mark all used pages
         for (int i = 0; i < num; ++i) {
                 const int bitmap_idx = i / BITMAP_BITS;
@@ -88,6 +87,10 @@ void page_pool_setup_mark(int num)
 
 void* page_pool_take()
 {
+        void *page = NULL;
+
+        spinlock_flags_t flags;
+        spinlock_irq_save(&pool.lock, &flags);
         for (int i = 0; i*BITMAP_BITS < pool.num_pages; ++i) {
                 if (pool.bitmaps[i] == 0) {
                         continue; // no free slot, next bitmap
@@ -96,10 +99,13 @@ void* page_pool_take()
                 const int zeros = count_leading_zeros(pool.bitmaps[i]);
                 if (zeros < BITMAP_BITS) { // next bit is unallocated
                         clear_bit(pool.bitmaps + i, BITMAP_BITS - zeros - 1); // little-endian
-                        return pool.pages + (i*BITMAP_BITS + zeros)*PAGE_SIZE;
+                        page = pool.pages + (i*BITMAP_BITS + zeros)*PAGE_SIZE;
+                        break; // found
                 }
         }
-        return NULL;
+        spinlock_irq_restore(&pool.lock, &flags);
+
+        return page;
 }
 
 void page_pool_drop(void* page)
@@ -109,5 +115,9 @@ void page_pool_drop(void* page)
         const int bitmap_idx = page_idx / BITMAP_BITS;
         int bitmap_nth = page_idx % BITMAP_BITS;
         bitmap_nth = BITMAP_BITS - bitmap_nth - 1; // little-endian
+
+        spinlock_flags_t flags;
+        spinlock_irq_save(&pool.lock, &flags);
         set_bit(pool.bitmaps + bitmap_idx, bitmap_nth);
+        spinlock_irq_restore(&pool.lock, &flags);
 }

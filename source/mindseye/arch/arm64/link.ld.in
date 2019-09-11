@@ -18,6 +18,10 @@ s_fork = .;
                 *(.rodata*)
         }
 
+        .data : {
+                *(.data)
+        }
+
         .bss : {
                 *(.bss)
                 *(COMMON)
@@ -36,10 +40,6 @@ s_init_array = .;
                 *(.init_array)
                 *(SORT_BY_INIT_PRIORITY(.init_array.*))
 e_init_array = .;
-        }
-
-        .data : {
-                *(.data)
         }
 
         .shared : {

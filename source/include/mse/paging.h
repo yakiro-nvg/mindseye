@@ -17,12 +17,12 @@ size_t              page_pool_setup        (const void*   _Nonnull   fdt);
 void                page_pool_setup_mark   (int                      num);
 
 /** Allocates a new page.
-\remarks: Protected by a spin lock.
+\remarks: Protected by IRQ save spin lock.
 \return NULL if out-of-memory. */
 void*   _Nullable   page_pool_take         ();
 
 /** Returns `page` to pool.
-\remarks: Protected by a spin lock. */
+\remarks: Protected by IRQ save spin lock. */
 void                page_pool_drop         (void*         _Nonnull   page);
 
 #endif // !_MSE_PAGING_H_

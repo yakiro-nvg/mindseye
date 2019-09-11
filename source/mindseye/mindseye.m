@@ -12,6 +12,7 @@
 // end of the kernel image
 extern uint8_t e_mindseye[];
 
+// claim physical memory
 static void claim_memory(const void* fdt)
 {
         const size_t ec = page_pool_setup(fdt);
@@ -23,6 +24,7 @@ static void claim_memory(const void* fdt)
         }
 }
 
+// static constructors
 void call_constructors();
 
 void mindseye(const void* fdt)
