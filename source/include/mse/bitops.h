@@ -10,17 +10,31 @@
 #endif
 
 /// Turns `nth` bit on.
-INLINE void  set_bit     (uint32_t*   _Nonnull    u,
-                          int                     nth)
+INLINE void  set_bit32     (uint32_t*   _Nonnull   u,
+                            int                    nth)
 {
-        *u |=  (1 << nth);
+        *u |=  ((uint32_t)1 << nth);
 }
 
 /// Turns `nth` bit off.
-INLINE void  clear_bit   (uint32_t*   _Nonnull    u,
-                          int                     nth)
+INLINE void  clear_bit32   (uint32_t*   _Nonnull   u,
+                            int                    nth)
 {
-        *u &= ~(1 << nth);
+        *u &= ~((uint32_t)1 << nth);
+}
+
+/// Turns `nth` bit on.
+INLINE void  set_bit64     (uint64_t*   _Nonnull   u,
+                            int                    nth)
+{
+        *u |=  ((uint64_t)1 << nth);
+}
+
+/// Turns `nth` bit off.
+INLINE void  clear_bit64   (uint64_t*   _Nonnull   u,
+                            int                    nth)
+{
+        *u &= ~((uint64_t)1 << nth);
 }
 
 #endif // !_MSE_BITOPS_H_

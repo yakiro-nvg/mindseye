@@ -42,12 +42,12 @@ INLINE error_t psci_to_mse_errno(int e)
 
 INLINE uint16_t parse_fdt_fid(const void *fdt, const char *name, int psci_offset)
 {
-        const uint32_t *prop = (const uint32_t*)fdt_getprop(fdt, psci_offset, name, NULL);
+        const uint32_t *prop = fdt_getprop(fdt, psci_offset, name, NULL);
         if (prop == NULL) {
                 PR_ERROR("'%s' was missing", name);
                 return 0;
         } else {
-                return (uint32_t)fdt_next_cell(1, &prop);
+                return (uint16_t)fdt_next_cell(1, &prop);
         }
 }
 
@@ -127,7 +127,7 @@ static error_t psci_cpu_on(int idx, uint64_t entry_point)
         if (ctx.fid_cpu_on == 0) {
                 return ERR_NOTSUPPORTED;
         }
-        int ec = psci_smc(ctx.fid_cpu_on, idx, entry_point, 0);
+        const int ec = psci_smc(ctx.fid_cpu_on, idx, entry_point, 0);
         return psci_to_mse_errno(ec);
 }
 
@@ -136,7 +136,7 @@ static error_t psci_cpu_off()
         if (ctx.fid_cpu_off == 0) {
                 return ERR_NOTSUPPORTED;
         }
-        int ec = psci_smc(ctx.fid_cpu_off, 0, 0, 0);
+        const int ec = psci_smc(ctx.fid_cpu_off, 0, 0, 0);
         return psci_to_mse_errno(ec);
 }
 

@@ -5,6 +5,6 @@
 
 .section ktext, "ax"
 _entry:
-        ldr x0, =sstack
+        ldr x0, =s_stack
         mov sp, x0
         b entry

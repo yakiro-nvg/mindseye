@@ -19,13 +19,13 @@ printk_driver_list_t printk_drivers = {
         .root = &root
 };
 
-extern char sprintk[]; extern char eprintk[];
+extern char s_printk[]; extern char e_printk[];
 static int write_off = 0, driver_off = 0;
 
 static void early_putc(printk_driver_context_t *ctx, const char c)
 {
         if (write_off != PRINTK_BUFFER_SIZE) {
-                sprintk[write_off++] = c;
+                s_printk[write_off++] = c;
         }
 }
 
@@ -42,7 +42,7 @@ static const printk_driver_class_t *class = &early_class;
 // driver context resides in bottom
 INLINE printk_driver_context_t* ctx()
 {
-        return (printk_driver_context_t*)(eprintk - driver_off);
+        return (printk_driver_context_t*)(e_printk - driver_off);
 }
 
 static bool try_switch_driver(
@@ -52,7 +52,7 @@ static bool try_switch_driver(
         if (c->init(ctx(), compatible, fdt, node_offset) == ERR_NONE) {
                 class = c; // switch to new driver
                 for (int i = 0; i < write_off; ++i) {
-                        const char ic = sprintk[i];
+                        const char ic = s_printk[i];
                         if (ic != '\0') {
                                 _putchar(ic); // and flush early log
                         }

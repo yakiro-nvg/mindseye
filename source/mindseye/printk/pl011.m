@@ -43,13 +43,13 @@ struct pl011_context_s {
 static bool parse_fdt(struct pl011_context_s *self, const void *fdt, int node_offset)
 {
         const int address_cells = fdt_address_cells(fdt, node_offset);
-        const uint32_t *reg = (const uint32_t*)fdt_getprop(fdt, node_offset, "reg", NULL);
+        const uint32_t *reg = fdt_getprop(fdt, node_offset, "reg", NULL);
         if (reg == NULL) {
                 PR_ERROR("'reg' was missing");
                 return false;
         }
         self->base_address = fdt_next_cell(address_cells, &reg);
-        const uint32_t *clk = (const uint32_t*)fdt_getprop(fdt, node_offset, "clocks", NULL);
+        const uint32_t *clk = fdt_getprop(fdt, node_offset, "clocks", NULL);
         if (clk == NULL) {
                 PR_ERROR("'clocks' was missing");
                 return false;
@@ -60,7 +60,7 @@ static bool parse_fdt(struct pl011_context_s *self, const void *fdt, int node_of
                 PR_ERROR("clock not found");
                 return false;
         }
-        const uint32_t *clk_frq = (const uint32_t*)fdt_getprop(fdt, clock_offset, "clock-frequency", NULL);
+        const uint32_t *clk_frq = fdt_getprop(fdt, clock_offset, "clock-frequency", NULL);
         if (clk_frq == NULL) {
                 PR_ERROR("'clock-frequency' was missing");
                 return false;

@@ -6,26 +6,23 @@
 #import <mse/prereq.h>
 
 /// Physical page allocator.
-typedef struct page_pool_s {
-        uint8_t*    _Nullable   pages;
-        uint32_t*   _Nullable   bitmap;
-        int                     num_bitmap;
-} page_pool_t;
+typedef struct page_pool_s page_pool_t;
 
-/** Setups a new page pool.
-@param pages: must be aligned on PAGE_SIZE.
-@param bitmap: number of bitmap = capacity / 32 (bits). */
-void                page_pool_setup   (page_pool_t*   _Nonnull   pool,
-                                       uint8_t*       _Nonnull   pages,
-                                       uint32_t*      _Nonnull   bitmap,
-                                       int                       capacity);
+/** Initialises page pool.
+\return starting memory address or negative error_t if failed. */
+size_t              page_pool_setup        (const void*   _Nonnull   fdt);
+
+/** Marks `num` pages from the beginning as used.
+\remarks: Called only one time by the primary core. */
+void                page_pool_setup_mark   (int                      num);
 
 /** Allocates a new page.
+\remarks: Protected by a spin lock.
 \return NULL if out-of-memory. */
-void*   _Nullable   page_pool_take    (page_pool_t*   _Nonnull   pool);
+void*   _Nullable   page_pool_take         ();
 
-/// Returns `page` to pool.
-void                page_pool_drop    (page_pool_t*   _Nonnull   pool,
-                                       void*          _Nonnull   page);
+/** Returns `page` to pool.
+\remarks: Protected by a spin lock. */
+void                page_pool_drop         (void*         _Nonnull   page);
 
 #endif // !_MSE_PAGING_H_

@@ -4,23 +4,19 @@ SECTIONS {
         . = @load_offset@;
 
         /* printk buffer */
-        sprintk = .;
+        s_printk = .;
         . = . + @printk_buffer_size@;
-        eprintk = .;
+        e_printk = .;
 
         .text (@load_offset@ + @text_offset@) : {
+                s_fork = .;
+
                 *(ktext)
                 *(.text*)
         }
 
-        .init_array : ALIGN(4) {
-                sinit_array = .;
-                *(.init_array)
-                *(SORT_BY_INIT_PRIORITY(.init_array.*))
-                einit_array = .;
-        }
-
         .data : {
+                *(.rodata*)
                 *(.data)
         }
 
@@ -28,14 +24,22 @@ SECTIONS {
                 *(.bss)
                 *(COMMON)
 
+                . = ALIGN(@page_size@);
+                e_fork = .;
+
                 /* stack */
-                . = ALIGN(4);
-                estack = .;
+                e_stack = .;
                 . = . + @stack_size@;
-                sstack = .;
+                s_stack = .;
         }
 
-        .rodata : {
-                *(.rodata*)
+        .init_array : ALIGN(4) {
+                s_init_array = .;
+                *(.init_array)
+                *(SORT_BY_INIT_PRIORITY(.init_array.*))
+                e_init_array = .;
         }
+
+        . = ALIGN(@page_size@);
+        e_mindseye = .;
 }

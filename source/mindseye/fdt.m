@@ -36,9 +36,9 @@ static error_t fdt_to_mse_errno(int e)
 
 const char* fdt_machine_name(const void *fdt)
 {
-        const char *name = (const char*)fdt_getprop(fdt, 0, "model", NULL);
+        const char *name = fdt_getprop(fdt, 0, "model", NULL);
         if (name == NULL) { // not found, use "compatible"
-                name = (const char*)fdt_getprop(fdt, 0, "compatible", NULL);
+                name = fdt_getprop(fdt, 0, "compatible", NULL);
         }
         return name;
 }

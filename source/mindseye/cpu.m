@@ -43,7 +43,7 @@ void cpu_setup(const void *fdt)
         if (num_cpus < 0) PR_FATAL("failed to get number of CPUs");
         for (int i = 0; i < num_cpus; ++i) {
                 const int cpu = fdt_cpu(fdt, i);
-                const char *enable_method = (const char*)fdt_getprop(fdt, cpu, "enable-method", NULL);
+                const char *enable_method = fdt_getprop(fdt, cpu, "enable-method", NULL);
                 if (enable_method == NULL) {
                         PR_ERROR("'enable-method' was missing for CPU #%d", i);
                 } else {

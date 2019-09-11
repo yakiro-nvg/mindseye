@@ -6,11 +6,23 @@
 #import <mse/prereq.h>
 
 /// Returns number of leading zero bits.
-INLINE int count_leading_zeros(uint32_t u)
+INLINE int count_leading_zeros32(uint32_t u)
 {
         uint32_t v;
         __asm volatile ("clz %w0, %w1" : "=r" (v) : "r" (u));
         return (int)v;
 }
+
+#ifdef __aarch64__
+
+/// Returns number of leading zero bits.
+INLINE int count_leading_zeros64(uint64_t u)
+{
+        uint32_t v;
+        __asm volatile ("clz %x0, %x1" : "=r" (v) : "r" (u));
+        return (int)v;
+}
+
+#endif
 
 #endif // !_MSE_ASM_ARM_BITOPS_H_
