@@ -4,20 +4,18 @@ SECTIONS {
         . = @load_offset@;
 
         /* printk buffer */
-        s_printk = .;
+s_printk = .;
         . = . + @printk_buffer_size@;
-        e_printk = .;
+e_printk = .;
 
         .text (@load_offset@ + @text_offset@) : {
-                s_fork = .;
-
+s_fork = .;
                 *(ktext)
                 *(.text*)
         }
 
-        .data : {
+        .rodata : {
                 *(.rodata*)
-                *(.data)
         }
 
         .bss : {
@@ -25,21 +23,29 @@ SECTIONS {
                 *(COMMON)
 
                 . = ALIGN(@page_size@);
-                e_fork = .;
+e_fork = .;
 
                 /* stack */
-                e_stack = .;
+e_stack = .;
                 . = . + @stack_size@;
-                s_stack = .;
+s_stack = .;
         }
 
         .init_array : ALIGN(4) {
-                s_init_array = .;
+s_init_array = .;
                 *(.init_array)
                 *(SORT_BY_INIT_PRIORITY(.init_array.*))
-                e_init_array = .;
+e_init_array = .;
+        }
+
+        .data : {
+                *(.data)
+        }
+
+        .shared : {
+                *(shared)
         }
 
         . = ALIGN(@page_size@);
-        e_mindseye = .;
+e_mindseye = .;
 }

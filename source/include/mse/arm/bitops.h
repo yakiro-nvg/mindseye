@@ -18,7 +18,7 @@ INLINE int count_leading_zeros32(uint32_t u)
 /// Returns number of leading zero bits.
 INLINE int count_leading_zeros64(uint64_t u)
 {
-        uint32_t v;
+        uint64_t v;
         __asm volatile ("clz %x0, %x1" : "=r" (v) : "r" (u));
         return (int)v;
 }

@@ -32,7 +32,7 @@ static struct page_pool_s {
         uint8_t*    _Nonnull   pages;
         int                    num_pages;
         bitmap_t*   _Nonnull   bitmaps;
-} pool;
+} pool __attribute__((section("shared")));
 
 static error_t parse_fdt(const void* fdt)
 {
@@ -75,13 +75,13 @@ void page_pool_setup_mark(int num)
         const uint8_t* bitmaps_end = align_forward(pool.bitmaps + num_bitmaps, PAGE_SIZE);
         num = (bitmaps_end - pool.pages) / PAGE_SIZE; // will mark this buffer as used also
 
+        PR_INFO("used %d pages", num);
+
         // mark all used pages
         for (int i = 0; i < num; ++i) {
                 const int bitmap_idx = i / BITMAP_BITS;
-                const int bitmap_nth = i % BITMAP_BITS;
-                if (pool.bitmaps[bitmap_idx] == 0) {
-                        return;
-                }
+                int bitmap_nth = i % BITMAP_BITS;
+                bitmap_nth = BITMAP_BITS - bitmap_nth - 1; // little-endian
                 clear_bit(pool.bitmaps + bitmap_idx, bitmap_nth);
         }
 }
@@ -89,10 +89,14 @@ void page_pool_setup_mark(int num)
 void* page_pool_take()
 {
         for (int i = 0; i*BITMAP_BITS < pool.num_pages; ++i) {
-                const int clz = count_leading_zeros(pool.bitmaps[i]);
-                if (clz < BITMAP_BITS) { // next bit is unallocated
-                        clear_bit(pool.bitmaps + i, clz + 1);
-                        return pool.pages + (i*BITMAP_BITS + clz)*PAGE_SIZE;
+                if (pool.bitmaps[i] == 0) {
+                        continue; // no free slot, next bitmap
+                }
+
+                const int zeros = count_leading_zeros(pool.bitmaps[i]);
+                if (zeros < BITMAP_BITS) { // next bit is unallocated
+                        clear_bit(pool.bitmaps + i, BITMAP_BITS - zeros - 1); // little-endian
+                        return pool.pages + (i*BITMAP_BITS + zeros)*PAGE_SIZE;
                 }
         }
         return NULL;
@@ -103,6 +107,7 @@ void page_pool_drop(void* page)
         const int byte_dif = (((uint8_t*)page) - pool.pages);
         const int page_idx = byte_dif / PAGE_SIZE;
         const int bitmap_idx = page_idx / BITMAP_BITS;
-        const int bitmap_nth = page_idx % BITMAP_BITS;
+        int bitmap_nth = page_idx % BITMAP_BITS;
+        bitmap_nth = BITMAP_BITS - bitmap_nth - 1; // little-endian
         set_bit(pool.bitmaps + bitmap_idx, bitmap_nth);
 }
