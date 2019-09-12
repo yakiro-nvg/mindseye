@@ -25,6 +25,7 @@ s_fork_shared = .;
         . = ALIGN(@page_size@);
 e_fork_shared = .;
 
+
 s_fork_copy = .;
         .data : {
                 *(.data)
@@ -34,14 +35,14 @@ s_fork_copy = .;
                 *(.bss)
                 *(COMMON)
 
-                . = ALIGN(@page_size@);
-e_fork_copy = .;
-
                 /* stack */
 e_stack = .;
                 . = . + @stack_size@;
 s_stack = .;
         }
+
+        . = ALIGN(@page_size@);
+e_fork_copy = .
 
         .init_array : ALIGN(4) {
 s_init_array = .;

@@ -28,9 +28,7 @@ which is, at the fastest level is non-shared as well.
 Every bits that we share between cores, the cached value in other cores becomes stale. So
 it need to be synchronized by the cache coherence protocol, which is just message passing
 too. Besides, we need to explicitly use memory barrier to make that work, which is source
-of mistakes. Abuse of shared memory even worse if we consider about the fragmented nature
-of that. Which means CPU will accidentally flush not only the stale values, but also not
-related values on the same cache line, and also many cache lines since it was fragmented.
+of mistakes.
 
 .. figure:: images/multicore_smp.png
    :align: center
