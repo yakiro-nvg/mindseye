@@ -34,11 +34,21 @@ typedef const struct objc_selector_s* SEL;
 #define Nil (Class)0
 #define nil (id)0
 
+#define MIN(a, b) \
+        ({ __typeof__ (a) _a = (a); \
+           __typeof__ (b) _b = (b); \
+           _a < _b ? _a : _b; })
+
+#define MAX(a, b) \
+        ({ __typeof__ (a) _a = (a); \
+           __typeof__ (b) _b = (b); \
+           _a > _b ? _a : _b; })
+
 INLINE void* align_forward(void* p, int align)
 {
-    const uintptr_t pi = (uintptr_t)p;
-    const int mod = pi % align;
-    return mod == 0 ? (void*)pi : (void*)(pi + align - mod);
+        const uintptr_t pi = (uintptr_t)p;
+        const int mod = pi % align;
+        return mod == 0 ? (void*)pi : (void*)(pi + align - mod);
 }
 
 #endif // !_MSE_PREREQ_H_

@@ -12,9 +12,11 @@ typedef struct page_pool_s page_pool_t;
 \return starting memory address or negative error_t if failed. */
 size_t              page_pool_setup        (const void*   _Nonnull   fdt);
 
-/** Marks `num` pages from the beginning as used.
+/** Marks `used_pages` from the beginning as used.
+@param reserve: number of pages allocated to the dom0.
 \remarks: Called only one time by the primary core. */
-void                page_pool_setup_mark   (int                      num);
+void                page_pool_setup_mark   (int                      used_pages,
+                                            int                      reserved_pages);
 
 /** Allocates a new page.
 \remarks: Protected by IRQ save spin lock.

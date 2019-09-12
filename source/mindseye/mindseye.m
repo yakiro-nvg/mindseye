@@ -9,6 +9,9 @@
 
 #define LOG_TAG "entry"
 
+// TODO: should be passed from bootloader
+static const size_t reserved_bytes = 0x80000000;
+
 // end of the kernel image
 extern uint8_t e_mindseye[];
 
@@ -20,7 +23,7 @@ static void claim_memory(const void* fdt)
                 PR_FATAL("failed to claim memory");
         } else {
                 const size_t used_bytes = (size_t)e_mindseye - ec;
-                page_pool_setup_mark(used_bytes / PAGE_SIZE);
+                page_pool_setup_mark(used_bytes / PAGE_SIZE, (int)(reserved_bytes / PAGE_SIZE));
         }
 }
 
@@ -33,4 +36,5 @@ void mindseye(const void* fdt)
         call_constructors();
         printk_setup(fdt);
         cpu_setup(fdt);
+        while (true) { }
 }
