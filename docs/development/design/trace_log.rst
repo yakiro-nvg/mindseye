@@ -11,8 +11,8 @@ Log device is abstracted by Print-K driver (write-only).
 Print-K driver is owned by the primary core. In the early stage, there is a special
 driver named ``printk_early`` that stores log directly to RAM. If for any reason the
 system failed to reach the good state and no concrete log device is available, we still
-have an option to read log with a debugger. Which could be used to debug the concrete
-log driver as well.
+have an option to read log with a debugger. Which could be used for debugging of the
+concrete log driver as well.
 
 .. figure:: images/trace_log_arch.png
    :align: center

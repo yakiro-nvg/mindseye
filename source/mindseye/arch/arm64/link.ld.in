@@ -9,7 +9,7 @@ s_printk = .;
 e_printk = .;
 
         .text (@load_offset@ + @text_offset@) : {
-s_fork = .;
+s_fork_shared = .;
                 *(ktext)
                 *(.text*)
         }
@@ -18,6 +18,14 @@ s_fork = .;
                 *(.rodata*)
         }
 
+        .shared : {
+                *(shared)
+        }
+
+        . = ALIGN(@page_size@);
+e_fork_shared = .;
+
+s_fork_copy = .;
         .data : {
                 *(.data)
         }
@@ -27,7 +35,7 @@ s_fork = .;
                 *(COMMON)
 
                 . = ALIGN(@page_size@);
-e_fork = .;
+e_fork_copy = .;
 
                 /* stack */
 e_stack = .;
@@ -40,10 +48,6 @@ s_init_array = .;
                 *(.init_array)
                 *(SORT_BY_INIT_PRIORITY(.init_array.*))
 e_init_array = .;
-        }
-
-        .shared : {
-                *(shared)
         }
 
         . = ALIGN(@page_size@);
