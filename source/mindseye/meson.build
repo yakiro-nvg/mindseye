@@ -6,7 +6,6 @@ mindseye_srcs = [ files(
         'errno.m',
         'fdt.m',
         'mindseye.m',
-        'paging.m',
         'printk.m') ]
 
 mindseye_c_args = [ ]
@@ -19,10 +18,11 @@ mindseye_link_args = [ ]
 subdir('boards')
 subdir('arch')
 subdir('printk')
+subdir('mm')
 
 conf_data = configuration_data({
         'max_cpus': get_option('max_cpus'),
-        'page_size': get_option('page_size'),
+        'page_granule': get_option('page_granule'),
         'printk_buffer_size': get_option('printk_buffer_size') })
 configure_file(
         input: 'config.h.in',

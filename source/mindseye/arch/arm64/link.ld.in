@@ -22,7 +22,7 @@ s_fork_shared = .;
                 *(shared)
         }
 
-        . = ALIGN(@page_size@);
+        . = ALIGN(@page_granule@);
 e_fork_shared = .;
 
 
@@ -41,8 +41,8 @@ e_stack = .;
 s_stack = .;
         }
 
-        . = ALIGN(@page_size@);
-e_fork_copy = .
+        . = ALIGN(@page_granule@);
+e_fork_copy = .;
 
         .init_array : ALIGN(4) {
 s_init_array = .;
@@ -51,6 +51,6 @@ s_init_array = .;
 e_init_array = .;
         }
 
-        . = ALIGN(@page_size@);
+        . = ALIGN(@page_granule@);
 e_mindseye = .;
 }

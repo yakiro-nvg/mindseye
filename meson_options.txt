@@ -10,9 +10,9 @@ option( 'max_cpus',
         description: 'Maximum number of CPUs',
         value: 8)
 
-option( 'page_size',
+option( 'page_granule',
         type: 'integer',
-        description: 'Page size in bytes',
+        description: 'Page granule in bytes',
         value: 0x1000)
 
 option( 'stack_size',

@@ -3,7 +3,7 @@
 link_conf_data = configuration_data({
         'load_offset': load_offset,
         'text_offset': text_offset,
-        'page_size': get_option('page_size'),
+        'page_granule': get_option('page_granule'),
         'stack_size': get_option('stack_size'),
         'printk_buffer_size': get_option('printk_buffer_size') })
 configure_file(

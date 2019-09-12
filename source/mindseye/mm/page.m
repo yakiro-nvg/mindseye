@@ -2,30 +2,16 @@
  * SPDX-License-Identifier: BSD-2-Clause. */
 #import <mse/paging.h>
 
+#import "bitmap.h"
 #import <config.h>
 #import <string.h>
-#import <mse/bitops.h>
 #import <mse/spinlock.h>
 #import <mse/printk.h>
 #import <mse/fdt.h>
 
 #define LOG_TAG "paging"
 
-#ifdef MSE32
-typedef uint32_t bitmap_t;
-#define count_leading_zeros count_leading_zeros32
-#define clear_bit clear_bit32
-#define set_bit set_bit32
-#elif defined(MSE64)
-typedef uint64_t bitmap_t;
-#define count_leading_zeros count_leading_zeros64
-#define clear_bit clear_bit64
-#define set_bit set_bit64
-#else
-#error "not implemented"
-#endif
-
-enum { BITMAP_BITS = sizeof(bitmap_t)*8 };
+enum { PAGE_SIZE = PAGE_GRANULE };
 
 static struct page_pool_s {
         uint8_t*    _Nonnull   pages;
@@ -66,8 +52,12 @@ size_t page_pool_setup(const void* fdt)
         }
 }
 
-void page_pool_setup_mark(int used_pages, int reserved_pages)
+void page_pool_setup_mark(uint64_t used_bytes, uint64_t reserved_bytes)
 {
+        // number of page, round-up to PAGE_SIZE
+        const uint64_t reserved_pages = (reserved_bytes + PAGE_SIZE - 1) / PAGE_SIZE;
+        uint64_t used_pages = (used_bytes + PAGE_SIZE - 1) / PAGE_SIZE;
+
         // bitmaps starts after marked area
         pool.num_pages = MIN(reserved_pages, pool.num_pages);
         const size_t num_bitmaps = pool.num_pages / BITMAP_BITS;
@@ -79,7 +69,7 @@ void page_pool_setup_mark(int used_pages, int reserved_pages)
         used_pages = (bitmaps_end - pool.pages) / PAGE_SIZE; // will mark bitmaps buffer as used also
 
         // mark all used pages
-        for (int i = 0; i < used_pages; ++i) {
+        for (uint64_t i = 0; i < used_pages; ++i) {
                 const int bitmap_idx = i / BITMAP_BITS;
                 int bitmap_nth = i % BITMAP_BITS;
                 bitmap_nth = BITMAP_BITS - bitmap_nth - 1; // little-endian

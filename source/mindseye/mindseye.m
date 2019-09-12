@@ -23,7 +23,7 @@ static void claim_memory(const void* fdt)
                 PR_FATAL("failed to claim memory");
         } else {
                 const size_t used_bytes = (size_t)e_mindseye - ec;
-                page_pool_setup_mark(used_bytes / PAGE_SIZE, (int)(reserved_bytes / PAGE_SIZE));
+                page_pool_setup_mark(used_bytes, reserved_bytes);
         }
 }
 
