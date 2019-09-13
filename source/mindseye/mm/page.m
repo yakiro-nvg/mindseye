@@ -11,8 +11,6 @@
 
 #define LOG_TAG "paging"
 
-enum { PAGE_SIZE = PAGE_GRANULE };
-
 static struct page_pool_s {
         uint8_t*    _Nonnull   pages;
         int                    num_pages;
@@ -34,7 +32,7 @@ static error_t parse_fdt(const void* fdt)
                 return ERR_MALFORMED;
         } else {
                 pool.pages = (uint8_t*)fdt_next_cell(2, &reg);
-                pool.num_pages = fdt_next_cell(2, &reg) / PAGE_SIZE;
+                pool.num_pages = fdt_next_cell(2, &reg) / PAGE_GRANULE;
                 return ERR_NONE;
         }
 }
@@ -45,7 +43,7 @@ size_t page_pool_setup(const void* fdt)
         if (ec != ERR_NONE) {
                 return ec;
         } else {
-                PR_INFO("page size is %d bytes", PAGE_SIZE);
+                PR_INFO("page size is %d bytes", PAGE_GRANULE);
                 PR_INFO("discovered %d pages", pool.num_pages);
                 spinlock_init(&pool.lock);
                 return (size_t)pool.pages;
@@ -54,22 +52,22 @@ size_t page_pool_setup(const void* fdt)
 
 void page_pool_setup_mark(uint64_t used_bytes, uint64_t reserved_bytes)
 {
-        // number of page, round-up to PAGE_SIZE
-        const uint64_t reserved_pages = (reserved_bytes + PAGE_SIZE - 1) / PAGE_SIZE;
-        uint64_t used_pages = (used_bytes + PAGE_SIZE - 1) / PAGE_SIZE;
+        BUG_ON(reserved_bytes % PAGE_GRANULE == 0);
+        const uint64_t reserved_pages = reserved_bytes / PAGE_GRANULE;
+        int used_pages = (int)((used_bytes + PAGE_GRANULE - 1) / PAGE_GRANULE); // round-up to PAGE_SIZE
 
         // bitmaps starts after marked area
         pool.num_pages = MIN(reserved_pages, pool.num_pages);
         const size_t num_bitmaps = pool.num_pages / BITMAP_BITS;
         pool.num_pages = num_bitmaps*BITMAP_BITS; // clamp to multiple of bitmaps
         PR_INFO("dom0 reserves %d pages", pool.num_pages);
-        pool.bitmaps = (bitmap_t*)(pool.pages + used_pages*PAGE_SIZE);
+        pool.bitmaps = (bitmap_t*)(pool.pages + used_pages*PAGE_GRANULE);
         memset(pool.bitmaps, 0xff, sizeof(bitmap_t)*num_bitmaps); // unused
-        const uint8_t* bitmaps_end = align_forward(pool.bitmaps + num_bitmaps, PAGE_SIZE);
-        used_pages = (bitmaps_end - pool.pages) / PAGE_SIZE; // will mark bitmaps buffer as used also
+        const uint8_t* bitmaps_end = align_forward(pool.bitmaps + num_bitmaps, PAGE_GRANULE);
+        used_pages = (int)((bitmaps_end - pool.pages) / PAGE_GRANULE); // will mark bitmaps buffer as used also
 
         // mark all used pages
-        for (uint64_t i = 0; i < used_pages; ++i) {
+        for (int i = 0; i < used_pages; ++i) {
                 const int bitmap_idx = i / BITMAP_BITS;
                 int bitmap_nth = i % BITMAP_BITS;
                 bitmap_nth = BITMAP_BITS - bitmap_nth - 1; // little-endian

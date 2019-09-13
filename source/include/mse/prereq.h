@@ -44,6 +44,8 @@ typedef const struct objc_selector_s* SEL;
            __typeof__ (b) _b = (b); \
            _a > _b ? _a : _b; })
 
+#define BUG_ON(exp) if (!(exp)) PR_FATAL("assertion failed: %s", #exp)
+
 INLINE void* align_forward(void* p, int align)
 {
         const uintptr_t pi = (uintptr_t)p;

@@ -36,5 +36,37 @@ void mindseye(const void* fdt)
         call_constructors();
         printk_setup(fdt);
         cpu_setup(fdt);
+        {
+                void *p1 = page_pool_take(15*PAGE_GRANULE);
+                void *p2 = page_pool_take(PAGE_GRANULE);
+                void *p3 = page_pool_take(33*PAGE_GRANULE);
+                page_pool_drop(p2, PAGE_GRANULE);
+                void *p4 = page_pool_take(2*PAGE_GRANULE);
+                void *p5 = page_pool_take(PAGE_GRANULE);
+
+                PR_INFO("p1: 0x%p, p2: 0x%p, p3: 0x%p, p4: 0x%p, p5: 0x%p", p1, p2, p3, p4, p5);
+
+                page_pool_drop(p1, 15*PAGE_GRANULE);
+                page_pool_drop(p3, 33*PAGE_GRANULE);
+                page_pool_drop(p4, 2*PAGE_GRANULE);
+                page_pool_drop(p5, PAGE_GRANULE);
+        }
+
+        {
+                void *p1 = page_pool_take(15*PAGE_GRANULE);
+                void *p2 = page_pool_take(PAGE_GRANULE);
+                void *p3 = page_pool_take(33*PAGE_GRANULE);
+                page_pool_drop(p2, PAGE_GRANULE);
+                void *p4 = page_pool_take(2*PAGE_GRANULE);
+                void *p5 = page_pool_take(PAGE_GRANULE);
+
+                PR_INFO("p1: 0x%p, p2: 0x%p, p3: 0x%p, p4: 0x%p, p5: 0x%p", p1, p2, p3, p4, p5);
+
+                page_pool_drop(p1, 15*PAGE_GRANULE);
+                page_pool_drop(p3, 33*PAGE_GRANULE);
+                page_pool_drop(p4, 2*PAGE_GRANULE);
+                page_pool_drop(p5, PAGE_GRANULE);
+        }
+
         while (true) { }
 }
