@@ -89,7 +89,7 @@ void* page_pool_take()
                 const int zeros = count_leading_zeros(pool.bitmaps[i]);
                 if (zeros < BITMAP_BITS) { // next bit is unallocated
                         clear_bit(pool.bitmaps + i, BITMAP_BITS - zeros - 1); // little-endian
-                        page = pool.pages + (i*BITMAP_BITS + zeros)*PAGE_SIZE;
+                        page = pool.pages + (i*BITMAP_BITS + zeros)*PAGE_GRANULE;
                         break; // found
                 }
         }
@@ -101,7 +101,7 @@ void* page_pool_take()
 void page_pool_drop(void* page)
 {
         const int byte_dif = (((uint8_t*)page) - pool.pages);
-        const int page_idx = byte_dif / PAGE_SIZE;
+        const int page_idx = byte_dif / PAGE_GRANULE;
         const int bitmap_idx = page_idx / BITMAP_BITS;
         int bitmap_nth = page_idx % BITMAP_BITS;
         bitmap_nth = BITMAP_BITS - bitmap_nth - 1; // little-endian
