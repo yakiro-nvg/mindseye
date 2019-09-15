@@ -24,7 +24,7 @@ static int write_off = 0, driver_off = 0;
 
 static void early_putc(printk_driver_context_t *ctx, const char c)
 {
-        if (write_off != PRINTK_BUFFER_SIZE) {
+        if (write_off != PRINTK_CAPACITY) {
                 s_printk[write_off++] = c;
         }
 }
