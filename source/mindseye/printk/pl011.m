@@ -54,7 +54,7 @@ static bool parse_fdt(struct pl011_context_s *self, const void *fdt, int node_of
                 PR_ERROR("'clocks' was missing");
                 return false;
         }
-        const uint32_t clock_phandle = (uint32_t)fdt_next_cell(1, &clk);
+        const uint32_t clock_phandle = fdt_next_cell(1, &clk);
         const int clock_offset = fdt_node_offset_by_phandle(fdt, clock_phandle);
         if (clock_offset < 0) {
                 PR_ERROR("clock not found");
@@ -65,7 +65,7 @@ static bool parse_fdt(struct pl011_context_s *self, const void *fdt, int node_of
                 PR_ERROR("'clock-frequency' was missing");
                 return false;
         }
-        self->clock_frequency = (uint32_t)fdt_next_cell(1, &clk_frq);
+        self->clock_frequency = fdt_next_cell(1, &clk_frq);
         return true;
 }
 

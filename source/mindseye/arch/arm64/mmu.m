@@ -12,7 +12,7 @@ enum { NO_BLOCK_SIZE = -2 };
 enum { LOOKUP_LEVELS =  4 };
 
 typedef struct page_level_s {
-        uint64_t block_size;
+        int64_t block_size;
 } page_level_t;
 
 #if   PAGE_GRANULE == KB(4)
@@ -45,11 +45,17 @@ typedef struct PACKED page_table_entry_s {
         uint64_t table : 1; // FALSE is block
 } page_table_entry_t;
 
+#if 0
+static struct mmu_s {
+
+} mmu SECTION("shared");
+#endif
+
 // for map complete physical memory at offset
-INLINE int largest_level(uint64_t dom0_bytes)
+INLINE int largest_level(int64_t bytes)
 {
         for (int i = 0; i < LOOKUP_LEVELS; ++i) {
-                if (dom0_bytes % PL[i].block_size == 0) {
+                if (PL[i].block_size > 0 && bytes % PL[i].block_size == 0) {
                         return i;
                 }
         }
@@ -57,9 +63,9 @@ INLINE int largest_level(uint64_t dom0_bytes)
         return NOT_AVAILABLE;
 }
 
-void mmu_setup(uint64_t dom0_bytes)
+void mmu_setup(int64_t bytes)
 {
-        const int l = largest_level(dom0_bytes); BUG_ON(l < 0);
-        uint64_t num_pages = dom0_bytes / PL[l].block_size;
+        const int l = largest_level(bytes); BUG_ON(l < 0);
+        int64_t num_pages = bytes / PL[l].block_size;
         while (true) { }
 }

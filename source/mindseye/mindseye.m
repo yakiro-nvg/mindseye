@@ -10,8 +10,8 @@
 
 #define LOG_TAG "entry"
 
-// TODO: should be passed from bootloader
-static const size_t dom0_bytes = GB(2);
+// TODO: should be passed from some where?
+static const int64_t dom0_bytes = GB(2);
 
 // end of the kernel image
 extern uint8_t s_mindseye[];
@@ -20,12 +20,12 @@ extern uint8_t e_mindseye[];
 // claim physical memory
 static void claim_memory(const void *fdt)
 {
-        if (page_pool_setup(fdt) < 0) {
+        const int64_t used_bytes = e_mindseye - s_mindseye;
+        const int64_t bytes = page_pool_setup(fdt, used_bytes, dom0_bytes);
+        if (bytes < 0) {
                 PR_FATAL("failed to claim memory");
         } else {
-                const size_t used_bytes = (size_t)(e_mindseye - s_mindseye);
-                page_pool_setup_mark(used_bytes, dom0_bytes);
-                mmu_setup(dom0_bytes);
+                mmu_setup(bytes);
         }
 }
 

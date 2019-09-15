@@ -27,9 +27,6 @@ e_init_array = .;
                 *(shared)
         }
 
-        . = ALIGN(@page_granule@);
-s_fork_copy = .;
-
         .data : AT(ADDR(.data) - @page_voffset@ + @base_offset@) {
                 *(.data)
         }
@@ -42,9 +39,6 @@ s_fork_copy = .;
 e_stack = .;
                 . = . + @stack_size@;
 s_stack = .;
-
-        . = ALIGN(@page_granule@);
-e_fork_copy = .;
 
         . = ALIGN(0x1000);
 /* early page table */

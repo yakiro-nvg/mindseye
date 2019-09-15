@@ -40,14 +40,14 @@ INLINE error_t psci_to_mse_errno(int e)
         }
 }
 
-INLINE uint16_t parse_fdt_fid(const void *fdt, const char *name, int psci_offset)
+INLINE uint32_t parse_fdt_fid(const void *fdt, const char *name, int psci_offset)
 {
         const uint32_t *prop = fdt_getprop(fdt, psci_offset, name, NULL);
         if (prop == NULL) {
                 PR_ERROR("'%s' was missing", name);
                 return 0;
         } else {
-                return (uint16_t)fdt_next_cell(1, &prop);
+                return fdt_next_cell(1, &prop);
         }
 }
 

@@ -34,7 +34,7 @@ static struct page_pool_s {
         spinlock_t             lock;
 } pool SECTION("shared");
 
-static error_t parse_fdt(const void* fdt)
+static int64_t parse_fdt(const void* fdt)
 {
         // now support only single memory bank
         const int mem = fdt_subnode_offset(fdt, 0, "memory");
@@ -48,34 +48,22 @@ static error_t parse_fdt(const void* fdt)
                 return ERR_MALFORMED;
         } else {
                 fdt_next_cell(2, &reg); // skip address
+                const int64_t bytes = fdt_next_cell(2, &reg);
                 pool.pages = (uint8_t*)PAGE_VOFFSET;
-                pool.num_pages = fdt_next_cell(2, &reg) / PAGE_GRANULE;
-                return ERR_NONE;
+                pool.num_pages = bytes / PAGE_GRANULE;
+                return bytes;
         }
 }
 
-error_t page_pool_setup(const void* fdt)
-{
-        const error_t ec = parse_fdt(fdt);
-        if (ec != ERR_NONE) {
-                return ec;
-        } else {
-                PR_INFO("page size is %d bytes", PAGE_GRANULE);
-                PR_INFO("discovered %d pages", pool.num_pages);
-                spinlock_init(&pool.lock);
-                return ERR_NONE;
-        }
-}
-
-void page_pool_setup_mark(uint64_t used_bytes, uint64_t dom0_bytes)
+static void mark(int64_t used_bytes, int64_t dom0_bytes)
 {
         BUG_ON(dom0_bytes % PAGE_GRANULE != 0);
-        const uint64_t dom0_pages = dom0_bytes / PAGE_GRANULE;
+        const int64_t dom0_pages = dom0_bytes / PAGE_GRANULE;
         int used_pages = (int)((used_bytes + PAGE_GRANULE - 1) / PAGE_GRANULE); // round-up to PAGE_SIZE
 
         // bitmaps starts after marked area
         pool.num_pages = MIN(dom0_pages, pool.num_pages);
-        const size_t num_bitmaps = pool.num_pages / BITMAP_BITS;
+        const int64_t num_bitmaps = pool.num_pages / BITMAP_BITS;
         pool.num_pages = num_bitmaps*BITMAP_BITS; // clamp to multiple of bitmaps
         PR_INFO("reserves %d pages for dom0", pool.num_pages);
         pool.bitmaps = (bitmap_t*)(pool.pages + used_pages*PAGE_GRANULE);
@@ -92,9 +80,18 @@ void page_pool_setup_mark(uint64_t used_bytes, uint64_t dom0_bytes)
         }
 }
 
-void* page_pool_base_address()
+int64_t page_pool_setup(const void* fdt, int64_t used_bytes, int64_t dom0_bytes)
 {
-        return pool.pages;
+        const int64_t bytes = parse_fdt(fdt);
+
+        if (bytes > 0) {
+                PR_INFO("page size is %d bytes", PAGE_GRANULE);
+                PR_INFO("discovered %d pages", pool.num_pages);
+                spinlock_init(&pool.lock);
+                mark(used_bytes, dom0_bytes);
+        }
+
+        return bytes;
 }
 
 void* page_pool_take()
