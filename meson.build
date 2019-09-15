@@ -8,6 +8,7 @@ project('mindseye', [ 'c', 'objc' ], default_options: [
         'b_asneeded=false' ])
 
 c_args = [
+        '-g',
         '-ffreestanding',
         '-fno-function-sections',
         '-mno-red-zone' ]

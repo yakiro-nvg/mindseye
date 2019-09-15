@@ -12,6 +12,8 @@
 #define UNUSED(x) (void)(x)
 #define CONSTRUCTOR __attribute__((constructor))
 #define ROOT_CLASS __attribute__((__objc_root_class__))
+#define SECTION(x) __attribute__((section(x)))
+#define PACKED __attribute__((__packed__))
 #define ASSUME_NONNULL_BEGIN _Pragma("clang assume_nonnull begin")
 #define ASSUME_NONNULL_END _Pragma("clang assume_nonnull end")
 
@@ -44,7 +46,11 @@ typedef const struct objc_selector_s* SEL;
            __typeof__ (b) _b = (b); \
            _a > _b ? _a : _b; })
 
-#define BUG_ON(exp) if (!(exp)) PR_FATAL("assertion failed: %s", #exp)
+#define BUG_ON(exp) if (exp) PR_FATAL("assertion failed: %s", #exp)
+
+#define KB(n)   (n*0x400ull)
+#define MB(n) KB(n*0x400ull)
+#define GB(n) MB(n*0x400ull)
 
 INLINE void* align_forward(void* p, int align)
 {

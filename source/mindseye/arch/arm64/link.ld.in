@@ -1,56 +1,60 @@
 /* Copyright (c) 2019 Nguyen, Giang (G. Yakiro). All rights reserved.
  * SPDX-License-Identifier: BSD-2-Clause. */
 SECTIONS {
-        . = @load_offset@;
+        . = @page_voffset@;
+s_mindseye = .;
 
-        /* printk buffer */
-s_printk = .;
-        . = . + @printk_buffer_size@;
-e_printk = .;
-
-        .text (@load_offset@ + @text_offset@) : {
-s_fork_shared = .;
+        . = . + @text_offset@;
+        .text : AT(ADDR(.text) - @page_voffset@ + @load_offset@) {
                 *(ktext)
                 *(.text*)
         }
 
-        .rodata : {
-                *(.rodata*)
-        }
-
-        .shared : {
-                *(shared)
-        }
-
-        . = ALIGN(@page_granule@);
-e_fork_shared = .;
-
-
-s_fork_copy = .;
-        .data : {
-                *(.data)
-        }
-
-        .bss : {
-                *(.bss)
-                *(COMMON)
-
-                /* stack */
-e_stack = .;
-                . = . + @stack_size@;
-s_stack = .;
-        }
-
-        . = ALIGN(@page_granule@);
-e_fork_copy = .;
-
-        .init_array : ALIGN(4) {
+        .init_array ALIGN(4) : AT(ADDR(.init_array) - @page_voffset@ + @load_offset@) {
 s_init_array = .;
                 *(.init_array)
                 *(SORT_BY_INIT_PRIORITY(.init_array.*))
 e_init_array = .;
         }
 
+        .rodata : AT(ADDR(.rodata) - @page_voffset@ + @load_offset@) {
+                *(.rodata*)
+        }
+
+        .shared : AT(ADDR(.shared) - @page_voffset@ + @load_offset@) {
+                *(shared)
+        }
+
         . = ALIGN(@page_granule@);
+s_fork_copy = .;
+
+        .data : AT(ADDR(.data) - @page_voffset@ + @load_offset@) {
+                *(.data)
+        }
+
+        .bss : AT(ADDR(.bss) - @page_voffset@ + @load_offset@) {
+                *(.bss)
+                *(COMMON)
+
+/* stack */
+e_stack = .;
+                . = . + @stack_size@;
+s_stack = .;
+
+        . = ALIGN(@page_granule@);
+e_fork_copy = .;
+
+        . = ALIGN(0x1000);
+/* early page table */
+s_early_ptbl = .;
+                . = . + (512*3); /* 4KB granule */
+e_early_ptbl = .;
+
+/* printk buffer */
+s_printk = .;
+                . = . + @printk_buffer_size@;
+e_printk = .;
+        }
+
 e_mindseye = .;
 }

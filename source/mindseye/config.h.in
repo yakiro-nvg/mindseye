@@ -4,7 +4,9 @@
 #define _MSE_CONFIG_H_
 
 #define MAX_CPUS @max_cpus@
+#define LOAD_OFFSET @load_offset@
 #define PAGE_GRANULE @page_granule@
+#define PAGE_VOFFSET @page_voffset@
 #define PRINTK_BUFFER_SIZE @printk_buffer_size@
 
 #endif // !_MSE_CONFIG_H_

@@ -11,7 +11,7 @@
 // TODO: should be passed from bootloader
 static const void *fdt = (const void *)0x40000000;
 
-void entry()
+void centry()
 {
         printf("\n--=-=-=-=-=-=- Mind's Eye, welcome! -=-=-=-=-=-=--\n");
         const char *name = fdt_machine_name(fdt) ? : "unknown";

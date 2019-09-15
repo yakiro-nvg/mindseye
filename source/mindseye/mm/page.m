@@ -2,21 +2,37 @@
  * SPDX-License-Identifier: BSD-2-Clause. */
 #import <mse/paging.h>
 
-#import "bitmap.h"
 #import <config.h>
 #import <string.h>
+#import <mse/bitops.h>
 #import <mse/spinlock.h>
 #import <mse/printk.h>
 #import <mse/fdt.h>
 
 #define LOG_TAG "paging"
 
+#ifdef MSE32
+typedef uint32_t bitmap_t;
+#define count_leading_zeros count_leading_zeros32
+#define clear_bit clear_bit32
+#define set_bit set_bit32
+#elif defined(MSE64)
+typedef uint64_t bitmap_t;
+#define count_leading_zeros count_leading_zeros64
+#define clear_bit clear_bit64
+#define set_bit set_bit64
+#else
+#error "not implemented"
+#endif
+
+enum { BITMAP_BITS = sizeof(bitmap_t)*8 };
+
 static struct page_pool_s {
         uint8_t*    _Nonnull   pages;
         int                    num_pages;
         bitmap_t*   _Nonnull   bitmaps;
         spinlock_t             lock;
-} pool __attribute__((section("shared")));
+} pool SECTION("shared");
 
 static error_t parse_fdt(const void* fdt)
 {
@@ -50,17 +66,17 @@ size_t page_pool_setup(const void* fdt)
         }
 }
 
-void page_pool_setup_mark(uint64_t used_bytes, uint64_t reserved_bytes)
+void page_pool_setup_mark(uint64_t used_bytes, uint64_t dom0_bytes)
 {
-        BUG_ON(reserved_bytes % PAGE_GRANULE == 0);
-        const uint64_t reserved_pages = reserved_bytes / PAGE_GRANULE;
+        BUG_ON(dom0_bytes % PAGE_GRANULE != 0);
+        const uint64_t dom0_pages = dom0_bytes / PAGE_GRANULE;
         int used_pages = (int)((used_bytes + PAGE_GRANULE - 1) / PAGE_GRANULE); // round-up to PAGE_SIZE
 
         // bitmaps starts after marked area
-        pool.num_pages = MIN(reserved_pages, pool.num_pages);
+        pool.num_pages = MIN(dom0_pages, pool.num_pages);
         const size_t num_bitmaps = pool.num_pages / BITMAP_BITS;
         pool.num_pages = num_bitmaps*BITMAP_BITS; // clamp to multiple of bitmaps
-        PR_INFO("dom0 reserves %d pages", pool.num_pages);
+        PR_INFO("reserves %zd bytes for dom0", pool.num_pages*PAGE_GRANULE);
         pool.bitmaps = (bitmap_t*)(pool.pages + used_pages*PAGE_GRANULE);
         memset(pool.bitmaps, 0xff, sizeof(bitmap_t)*num_bitmaps); // unused
         const uint8_t* bitmaps_end = align_forward(pool.bitmaps + num_bitmaps, PAGE_GRANULE);
@@ -73,6 +89,11 @@ void page_pool_setup_mark(uint64_t used_bytes, uint64_t reserved_bytes)
                 bitmap_nth = BITMAP_BITS - bitmap_nth - 1; // little-endian
                 clear_bit(pool.bitmaps + bitmap_idx, bitmap_nth);
         }
+}
+
+void* page_pool_base_address()
+{
+        return pool.pages;
 }
 
 void* page_pool_take()

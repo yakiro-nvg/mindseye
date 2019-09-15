@@ -9,7 +9,8 @@
 #import <mse/arm/spinlock.h>
 #endif
 
-/// CPU spin lock.
+/** CPU non-recursive spin lock.
+\remarks: We don't encourage locking. */
 typedef struct spinlock_s {
         arch_spinlock_t arch_lock;
 } spinlock_t;

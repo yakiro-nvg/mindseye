@@ -10,7 +10,7 @@
 #define LOG_TAG "entry"
 
 // TODO: should be passed from bootloader
-static const size_t reserved_bytes = 0x80000000;
+static const size_t dom0_bytes = GB(2);
 
 // end of the kernel image
 extern uint8_t e_mindseye[];
@@ -23,7 +23,8 @@ static void claim_memory(const void* fdt)
                 PR_FATAL("failed to claim memory");
         } else {
                 const size_t used_bytes = (size_t)e_mindseye - ec;
-                page_pool_setup_mark(used_bytes, reserved_bytes);
+                page_pool_setup_mark(used_bytes, dom0_bytes);
+                mmu_setup(dom0_bytes);
         }
 }
 
