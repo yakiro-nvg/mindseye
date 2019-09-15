@@ -6,5 +6,5 @@ cp libinterceptor-x86_64.so libinterceptor-haswell.so
 
 export TRAVIS=true
 cd /root
-meson --cross-file=cross/aarch64.ini build
-cd build && /sonar/build-wrapper-linux-x86-64 --out-dir bw-output ninja
+mkdir build && cd build && cmake ../ -DCMAKE_TOOLCHAIN_FILE=../cross/aarch64.cmake
+/sonar/build-wrapper-linux-x86-64 --out-dir bw-output make
