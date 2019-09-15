@@ -47,7 +47,8 @@ static error_t parse_fdt(const void* fdt)
                 PR_ERROR("'reg' was missing");
                 return ERR_MALFORMED;
         } else {
-                pool.pages = (uint8_t*)fdt_next_cell(2, &reg);
+                fdt_next_cell(2, &reg); // skip address
+                pool.pages = (uint8_t*)PAGE_VOFFSET;
                 pool.num_pages = fdt_next_cell(2, &reg) / PAGE_GRANULE;
                 return ERR_NONE;
         }
