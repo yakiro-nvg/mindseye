@@ -78,7 +78,6 @@ void page_pool_setup_mark(uint64_t used_bytes, uint64_t dom0_bytes)
         pool.num_pages = num_bitmaps*BITMAP_BITS; // clamp to multiple of bitmaps
         PR_INFO("reserves %d pages for dom0", pool.num_pages);
         pool.bitmaps = (bitmap_t*)(pool.pages + used_pages*PAGE_GRANULE);
-        while (true) { }
         memset(pool.bitmaps, 0xff, sizeof(bitmap_t)*num_bitmaps); // unused
         const uint8_t* bitmaps_end = align_forward(pool.bitmaps + num_bitmaps, PAGE_GRANULE);
         used_pages = (int)((bitmaps_end - pool.pages) / PAGE_GRANULE); // will mark bitmaps buffer as used also
