@@ -53,7 +53,7 @@ static error_t parse_fdt(const void* fdt)
         }
 }
 
-size_t page_pool_setup(const void* fdt)
+error_t page_pool_setup(const void* fdt)
 {
         const error_t ec = parse_fdt(fdt);
         if (ec != ERR_NONE) {
@@ -62,7 +62,7 @@ size_t page_pool_setup(const void* fdt)
                 PR_INFO("page size is %d bytes", PAGE_GRANULE);
                 PR_INFO("discovered %d pages", pool.num_pages);
                 spinlock_init(&pool.lock);
-                return (size_t)pool.pages;
+                return ERR_NONE;
         }
 }
 
@@ -76,8 +76,9 @@ void page_pool_setup_mark(uint64_t used_bytes, uint64_t dom0_bytes)
         pool.num_pages = MIN(dom0_pages, pool.num_pages);
         const size_t num_bitmaps = pool.num_pages / BITMAP_BITS;
         pool.num_pages = num_bitmaps*BITMAP_BITS; // clamp to multiple of bitmaps
-        PR_INFO("reserves %zd bytes for dom0", pool.num_pages*PAGE_GRANULE);
+        PR_INFO("reserves %d pages for dom0", pool.num_pages);
         pool.bitmaps = (bitmap_t*)(pool.pages + used_pages*PAGE_GRANULE);
+        while (true) { }
         memset(pool.bitmaps, 0xff, sizeof(bitmap_t)*num_bitmaps); // unused
         const uint8_t* bitmaps_end = align_forward(pool.bitmaps + num_bitmaps, PAGE_GRANULE);
         used_pages = (int)((bitmaps_end - pool.pages) / PAGE_GRANULE); // will mark bitmaps buffer as used also

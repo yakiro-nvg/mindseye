@@ -1,38 +1,40 @@
 /* Copyright (c) 2019 Nguyen, Giang (G. Yakiro). All rights reserved.
  * SPDX-License-Identifier: BSD-2-Clause. */
+ENTRY(entry)
+
 SECTIONS {
         . = @page_voffset@;
-s_mindseye = .;
 
-        . = . + @text_offset@;
-        .text : AT(ADDR(.text) - @page_voffset@ + @load_offset@) {
+s_mindseye = .;
+        . = . + @load_offset@ - @base_offset@;
+        .text : AT(ADDR(.text) - @page_voffset@ + @base_offset@) {
                 *(ktext)
                 *(.text*)
         }
 
-        .init_array ALIGN(4) : AT(ADDR(.init_array) - @page_voffset@ + @load_offset@) {
+        .init_array ALIGN(4) : AT(ADDR(.init_array) - @page_voffset@ + @base_offset@) {
 s_init_array = .;
                 *(.init_array)
                 *(SORT_BY_INIT_PRIORITY(.init_array.*))
 e_init_array = .;
         }
 
-        .rodata : AT(ADDR(.rodata) - @page_voffset@ + @load_offset@) {
+        .rodata : AT(ADDR(.rodata) - @page_voffset@ + @base_offset@) {
                 *(.rodata*)
         }
 
-        .shared : AT(ADDR(.shared) - @page_voffset@ + @load_offset@) {
+        .shared : AT(ADDR(.shared) - @page_voffset@ + @base_offset@) {
                 *(shared)
         }
 
         . = ALIGN(@page_granule@);
 s_fork_copy = .;
 
-        .data : AT(ADDR(.data) - @page_voffset@ + @load_offset@) {
+        .data : AT(ADDR(.data) - @page_voffset@ + @base_offset@) {
                 *(.data)
         }
 
-        .bss : AT(ADDR(.bss) - @page_voffset@ + @load_offset@) {
+        .bss : AT(ADDR(.bss) - @page_voffset@ + @base_offset@) {
                 *(.bss)
                 *(COMMON)
 
@@ -47,7 +49,7 @@ e_fork_copy = .;
         . = ALIGN(0x1000);
 /* early page table */
 s_early_ptbl = .;
-                . = . + (512*3); /* 4KB granule */
+                . = . + (512*5); /* 4KB granule */
 e_early_ptbl = .;
 
 /* printk buffer */

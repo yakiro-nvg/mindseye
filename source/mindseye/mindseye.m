@@ -3,6 +3,7 @@
 #import <mse/mindseye.h>
 
 #import <config.h>
+#import <mse/fdt.h>
 #import <mse/paging.h>
 #import <mse/printk.h>
 #import <mse/cpu.h>
@@ -13,16 +14,16 @@
 static const size_t dom0_bytes = GB(2);
 
 // end of the kernel image
+extern uint8_t s_mindseye[];
 extern uint8_t e_mindseye[];
 
 // claim physical memory
-static void claim_memory(const void* fdt)
+static void claim_memory(const void *fdt)
 {
-        const size_t ec = page_pool_setup(fdt);
-        if (ec < 0) {
+        if (page_pool_setup(fdt) < 0) {
                 PR_FATAL("failed to claim memory");
         } else {
-                const size_t used_bytes = (size_t)e_mindseye - ec;
+                const size_t used_bytes = (size_t)(e_mindseye - s_mindseye);
                 page_pool_setup_mark(used_bytes, dom0_bytes);
                 mmu_setup(dom0_bytes);
         }
@@ -33,9 +34,11 @@ void call_constructors();
 
 void mindseye(const void* fdt)
 {
+        PR_INFO("--=-=-=-=-=-=- Mind's Eye, welcome! -=-=-=-=-=-=--");
+        const char *name = fdt_machine_name(fdt) ? : "unknown";
+        PR_INFO("machine name: %s", name);
         claim_memory(fdt);
-        call_constructors();
+        call_constructors(fdt);
         printk_setup(fdt);
         cpu_setup(fdt);
-        while (true) { }
 }

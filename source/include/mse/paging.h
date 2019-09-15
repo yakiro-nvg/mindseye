@@ -8,9 +8,8 @@
 /// Physical page allocator.
 typedef struct page_pool_s page_pool_t;
 
-/** Initialises page pool.
-\return starting memory address or negative error_t if failed. */
-size_t                  page_pool_setup          (const void*   _Nonnull   fdt);
+/// Initialises page pool.
+error_t                 page_pool_setup          (const void*   _Nonnull   fdt);
 
 /** Marks `used_bytes` from the beginning as used.
 @param dom0_bytes: number of bytes allocated to the dom0.

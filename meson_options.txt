@@ -15,12 +15,10 @@ option('page_granule',
        description: 'Page granule in bytes',
        value: '0x1000')
 
-
 option('page_voffset',
        type: 'string',
-       description: 'To map complete physical memory.',
-#      value: '0xfff000000000')
-       value: '0x40800000')
+       description: 'To map physical memory.',
+       value: '0xfff000000000')
 
 option('stack_size',
        type: 'string',

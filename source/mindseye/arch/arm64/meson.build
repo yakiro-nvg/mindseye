@@ -3,7 +3,6 @@
 link_conf_data = configuration_data({
         'base_offset': base_offset,
         'load_offset': load_offset,
-        'text_offset': text_offset,
         'page_granule': get_option('page_granule'),
         'page_voffset': get_option('page_voffset'),
         'stack_size': get_option('stack_size'),
@@ -18,6 +17,5 @@ mindseye_link_args += [ '-Wl,-T,@0@/@1@'.format(meson.current_build_dir(), 'link
 mindseye_srcs += [ files(
         'early_ptbl.S',
         'entry.S',
-        'entry.m',
         'psci.S',
         'mmu.m') ]

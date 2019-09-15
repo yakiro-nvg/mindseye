@@ -22,7 +22,7 @@ subdir('mm')
 
 conf_data = configuration_data({
         'max_cpus': get_option('max_cpus'),
-        'load_offset': load_offset,
+        'base_offset': base_offset,
         'page_granule': get_option('page_granule'),
         'page_voffset': get_option('page_voffset'),
         'printk_buffer_size': get_option('printk_buffer_size') })

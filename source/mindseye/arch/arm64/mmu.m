@@ -61,4 +61,5 @@ void mmu_setup(uint64_t dom0_bytes)
 {
         const int l = largest_level(dom0_bytes); BUG_ON(l < 0);
         uint64_t num_pages = dom0_bytes / PL[l].block_size;
+        while (true) { }
 }
