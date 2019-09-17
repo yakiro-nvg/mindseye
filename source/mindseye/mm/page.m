@@ -80,6 +80,18 @@ static void mark(int64_t used_bytes, int64_t dom0_bytes)
         }
 }
 
+static void drop_no_lock(uint8_t* pages, int num_pages)
+{
+        const int first_idx = (pages - pool.pages) / PAGE_GRANULE;
+        for (int i = 0; i < num_pages; ++i) {
+                const int page_idx = first_idx + i;
+                const int bitmap_idx = page_idx / BITMAP_BITS;
+                int bitmap_nth = page_idx % BITMAP_BITS;
+                bitmap_nth = BITMAP_BITS - bitmap_nth - 1; // little-endian
+                set_bit(pool.bitmaps + bitmap_idx, bitmap_nth);
+        }
+}
+
 int64_t page_pool_setup(const void* fdt, int64_t used_bytes, int64_t dom0_bytes)
 {
         const int64_t bytes = parse_fdt(fdt);
@@ -94,39 +106,70 @@ int64_t page_pool_setup(const void* fdt, int64_t used_bytes, int64_t dom0_bytes)
         return bytes;
 }
 
-void* page_pool_take()
+paddr_t* page_pool_take(int num_bytes, int align)
 {
-        void *page = NULL;
+        uint8_t *pages = NULL;
+        bool alignment_matched = false;
+        int acc_pages = 0, num_padding = 0;
+        BUG_ON(align % PAGE_GRANULE != 0);
+        const int num_pages = (num_bytes + PAGE_GRANULE - 1) / PAGE_GRANULE;
 
         spinlock_flags_t flags;
         spinlock_irq_save(&pool.lock, &flags);
-        for (int i = 0; i*BITMAP_BITS < pool.num_pages; ++i) {
-                if (pool.bitmaps[i] == 0) {
-                        continue; // no free slot, next bitmap
-                }
 
-                const int zeros = count_leading_zeros(pool.bitmaps[i]);
+        for (int i = 0; i*BITMAP_BITS < pool.num_pages;) {
+                const int zeros = pool.bitmaps[i] == 0 ? 64 : count_leading_zeros(pool.bitmaps[i]);
+
                 if (zeros < BITMAP_BITS) { // next bit is unallocated
                         clear_bit(pool.bitmaps + i, BITMAP_BITS - zeros - 1); // little-endian
-                        page = pool.pages + (i*BITMAP_BITS + zeros)*PAGE_GRANULE;
-                        break; // found
+                        uint8_t *cp = pool.pages + (i*BITMAP_BITS + zeros)*PAGE_GRANULE;
+
+                        if (acc_pages == 0) {
+                                pages = cp; // remember starting point
+                        }
+
+                        // keep add padding pages until matched
+                        if (!alignment_matched) {
+                                if ((size_t)cp % align != 0) {
+                                        ++num_padding;
+                                } else {
+                                        alignment_matched = true;
+                                }
+                        }
+
+                        // check for complete
+                        if (++acc_pages - num_padding == num_pages) {
+                                // drop padding pages
+                                drop_no_lock(pages, num_padding);
+                                pages = pages + num_padding*PAGE_GRANULE;
+                                break; // found
+                        }
+
+                        // end of the current bitmap
+                        if (zeros == BITMAP_BITS - 1) {
+                                ++i;
+                        }
+                } else if (zeros == BITMAP_BITS) {
+                        // rollback marked bits
+                        drop_no_lock(pages, acc_pages);
+
+                        ++i; // next bitmap
+                        pages = NULL;
+                        alignment_matched = false;
+                        acc_pages = 0; num_padding = 0;
                 }
         }
+
         spinlock_irq_restore(&pool.lock, &flags);
 
-        return page;
+        return (paddr_t*)pages;
 }
 
-void page_pool_drop(void* page)
+void page_pool_drop(paddr_t* pages, int num_bytes)
 {
-        const int byte_dif = (((uint8_t*)page) - pool.pages);
-        const int page_idx = byte_dif / PAGE_GRANULE;
-        const int bitmap_idx = page_idx / BITMAP_BITS;
-        int bitmap_nth = page_idx % BITMAP_BITS;
-        bitmap_nth = BITMAP_BITS - bitmap_nth - 1; // little-endian
-
         spinlock_flags_t flags;
         spinlock_irq_save(&pool.lock, &flags);
-        set_bit(pool.bitmaps + bitmap_idx, bitmap_nth);
+        const int num_pages = (num_bytes + PAGE_GRANULE - 1) / PAGE_GRANULE;
+        drop_no_lock((uint8_t*)pages, num_pages);
         spinlock_irq_restore(&pool.lock, &flags);
 }

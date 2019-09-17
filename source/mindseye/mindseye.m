@@ -21,11 +21,11 @@ extern uint8_t e_mindseye[];
 static void claim_memory(const void *fdt)
 {
         const int64_t used_bytes = e_mindseye - s_mindseye;
-        const int64_t bytes = page_pool_setup(fdt, used_bytes, dom0_bytes);
-        if (bytes < 0) {
+        const int64_t num_bytes = page_pool_setup(fdt, used_bytes, dom0_bytes);
+        if (num_bytes < 0) {
                 PR_FATAL("failed to claim memory");
         } else {
-                mmu_setup(bytes);
+                mmu_setup(num_bytes);
         }
 }
 

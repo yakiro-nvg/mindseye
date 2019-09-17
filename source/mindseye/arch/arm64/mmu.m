@@ -52,10 +52,10 @@ static struct mmu_s {
 #endif
 
 // for map complete physical memory at offset
-INLINE int largest_level(int64_t bytes)
+INLINE int largest_level(int64_t num_bytes)
 {
         for (int i = 0; i < LOOKUP_LEVELS; ++i) {
-                if (PL[i].block_size > 0 && bytes % PL[i].block_size == 0) {
+                if (PL[i].block_size > 0 && num_bytes % PL[i].block_size == 0) {
                         return i;
                 }
         }
@@ -63,9 +63,10 @@ INLINE int largest_level(int64_t bytes)
         return NOT_AVAILABLE;
 }
 
-void mmu_setup(int64_t bytes)
+void mmu_setup(int64_t num_bytes)
 {
-        const int l = largest_level(bytes); BUG_ON(l < 0);
-        int64_t num_pages = bytes / PL[l].block_size;
+        const int l = largest_level(num_bytes); BUG_ON(l < 0);
+        const int64_t num_pages = num_bytes / PL[l].block_size;
+
         while (true) { }
 }

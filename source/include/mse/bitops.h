@@ -5,10 +5,6 @@
 
 #import <mse/prereq.h>
 
-#if defined(__arm__) || defined(__aarch64__)
-#import <mse/arm/bitops.h>
-#endif
-
 /// Turns `nth` bit on.
 INLINE void  set_bit32     (uint32_t*   _Nonnull   u,
                             int                    nth)
@@ -36,5 +32,10 @@ INLINE void  clear_bit64   (uint64_t*   _Nonnull   u,
 {
         *u &= ~((uint64_t)1 << nth);
 }
+
+/// 32 bits, not work on zero input.
+#define count_leading_zeros32 __builtin_clz
+/// 64 bits, not work on zero input.
+#define count_leading_zeros64 __builtin_clzll
 
 #endif // !_MSE_BITOPS_H_
