@@ -1,4 +1,7 @@
 .DS_Store
 .vscode/
+bin/
 build/
+build_xcode/
+build_test/
 docs/_build/

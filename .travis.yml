@@ -26,11 +26,11 @@ script:
   - echo FROM yakironvg/mindseye-aarch64 > Dockerfile
   - echo ADD . /root >> Dockerfile
   - echo ARG COVERITY_SCAN_TOKEN >> Dockerfile
-  - echo RUN /root/coverity.sh >> Dockerfile
-  - echo RUN /root/sonar.sh >> Dockerfile
+  - echo RUN /root/travis/coverity/coverity.sh >> Dockerfile
+  - echo RUN /root/travis/sonar/sonar.sh >> Dockerfile
   - docker build --build-arg COVERITY_SCAN_TOKEN -t withgit .
   - docker run withgit /bin/sh -c "echo run container once"
   - docker cp $(docker ps -lq):/root/build/bw-output/. bw-output
-  - sonar-scanner
+  - sonar-scanner -Dproject.settings=./travis/sonar/sonar-project.properties
   - docker cp $(docker ps -lq):/root/build/mindseye.tgz .
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then ./coverity_upload.sh; fi
+  - if [ "$TRAVIS_BRANCH" == "coverity_scan" ]; then ./travis/coverity/coverity_upload.sh; fi

@@ -1,0 +1,56 @@
+/* Copyright (c) 2019 Nguyen, Giang (G. Yakiro). All rights reserved.
+ * SPDX-License-Identifier: BSD-2-Clause. */
+ENTRY(entry)
+
+SECTIONS {
+        . = @PAGE_VOFFSET@;
+
+s_mindseye = .;
+        . = . + @LOAD_OFFSET@ - @BASE_OFFSET@;
+        .text : AT(ADDR(.text) - @PAGE_VOFFSET@ + @BASE_OFFSET@) {
+                *(ktext)
+                *(.text*)
+        }
+
+        .init_array ALIGN(4) : AT(ADDR(.init_array) - @PAGE_VOFFSET@ + @BASE_OFFSET@) {
+s_init_array = .;
+                *(.init_array)
+                *(SORT_BY_INIT_PRIORITY(.init_array.*))
+e_init_array = .;
+        }
+
+        .rodata : AT(ADDR(.rodata) - @PAGE_VOFFSET@ + @BASE_OFFSET@) {
+                *(.rodata*)
+        }
+
+        .shared : AT(ADDR(.shared) - @PAGE_VOFFSET@ + @BASE_OFFSET@) {
+                *(shared)
+        }
+
+        .data : AT(ADDR(.data) - @PAGE_VOFFSET@ + @BASE_OFFSET@) {
+                *(.data)
+        }
+
+        .bss : AT(ADDR(.bss) - @PAGE_VOFFSET@ + @BASE_OFFSET@) {
+                *(.bss)
+                *(COMMON)
+
+/* stack */
+e_stack = .;
+                . = . + @STACK_SIZE@;
+s_stack = .;
+
+        . = ALIGN(0x1000);
+/* early page table */
+s_early_ptbl = .;
+                . = . + (512*5); /* 4KB granule */
+e_early_ptbl = .;
+
+/* printk buffer */
+s_printk = .;
+                . = . + @PRINTK_CAPACITY@;
+e_printk = .;
+        }
+
+e_mindseye = .;
+}

@@ -1,0 +1,12 @@
+/* Copyright (c) 2019 Nguyen, Giang (G. Yakiro). All rights reserved.
+ * SPDX-License-Identifier: BSD-2-Clause. */
+#ifndef _MSE_CONFIG_H_
+#define _MSE_CONFIG_H_
+
+#define MAX_CPUS @MAX_CPUS@
+#define BASE_OFFSET @BASE_OFFSET@
+#define PAGE_GRANULE @PAGE_GRANULE@
+#define PAGE_VOFFSET @PAGE_VOFFSET@
+#define PRINTK_CAPACITY @PRINTK_CAPACITY@
+
+#endif // !_MSE_CONFIG_H_
